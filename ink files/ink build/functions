@@ -1,0 +1,371 @@
+=== function alter(ref x, k) ===
+~ x = x + k
+
+=== function print_num(x) ===
+{ 
+    - x >= 1000:
+        {print_num(x / 1000)} thousand { x mod 1000 > 0:{print_num(x mod 1000)}}
+    - x >= 100:
+        {print_num(x / 100)} hundred { x mod 100 > 0:and {print_num(x mod 100)}}
+    - x == 0:
+        zero
+    - else:
+        { x >= 20:
+            { x / 10:
+                - 2: twenty
+                - 3: thirty
+                - 4: forty
+                - 5: fifty
+                - 6: sixty
+                - 7: seventy
+                - 8: eighty
+                - 9: ninety
+            }
+            { x mod 10 > 0:<>-<>}
+        }
+        { x < 10 || x > 20:
+            { x mod 10:
+                - 1: one
+                - 2: two
+                - 3: three
+                - 4: four        
+                - 5: five
+                - 6: six
+                - 7: seven
+                - 8: eight
+                - 9: nine
+            }
+        - else:     
+            { x:
+                - 10: ten
+                - 11: eleven       
+                - 12: twelve
+                - 13: thirteen
+                - 14: fourteen
+                - 15: fifteen
+                - 16: sixteen      
+                - 17: seventeen
+                - 18: eighteen
+                - 19: nineteen
+            }
+        }
+}
+
+
+=== function print_day(x)===
+{ 
+    - x >= 1000:
+        {print_day(x / 1000)} thousand { x mod 1000 > 0:{print_day(x mod 1000)}}
+    - x >= 100:
+        {print_day(x / 100)} hundred { x mod 100 > 0:and {print_day(x mod 100)}}
+    - x == 20:
+        twentieth
+    - x == 30:
+        thirtieth
+    - x == 0:
+        zero
+    - else:
+        { x >= 20:
+            { x / 10:
+                - 2: twenty
+                - 3: thirty
+                - 4: forty
+                - 5: fifty
+                - 6: sixty
+                - 7: seventy
+                - 8: eighty
+                - 9: ninety
+            }
+            { x mod 10 > 0:<>-<>}
+        }
+        { x < 10 || x > 20:
+            { x mod 10:
+                - 1: first
+                - 2: second
+                - 3: third
+                - 4: fourth
+                - 5: fifth
+                - 6: sixth
+                - 7: seventh
+                - 8: eighth
+                - 9: ninth
+            }
+        - else:     
+            { x:
+                - 10: tenth
+                - 11: eleventh
+                - 12: twelfth
+                - 13: thirteenth
+                - 14: fourteenth
+                - 15: fifteenth
+                - 16: sixteenth   
+                - 17: seventeenth
+                - 18: eighteenth
+                - 19: nineteenth
+            }
+        }
+}
+
+===function print_month(x)===
+{
+    - x == 1: 
+        Ianuarius
+    - x == 2:
+        Februarius
+    - x == 3: 
+        Martius
+    - x == 4:
+        Aprilis
+    - else:
+        placeholder_month
+}
+    
+/// ===function 30sec===
+/// ~ alter (CURRENT_SEC, 1)
+
+/// ===function advancetime(minutes)===
+/// { CURRENT_MIN == 60:
+///    ~ advancetime(hours) 
+///    }
+    
+
+///
+//===function advancesec(seconds)===
+//{ seconds > 0.0:
+//    ~ alter(SECOND, seconds)
+//    ~ seconds = 0
+//{
+//    -SECOND >= 60:
+//        ~ temp y = FLOOR(SECOND / 60)
+//        ~ alter(MINUTE, y)
+//        ~ SECOND = SECOND mod 60
+//}
+//}
+
+///
+//===function advancemin(minutes)===
+//{ minutes > 0.0:
+//    ~ alter(MINUTE, minutes)
+//    ~ minutes = 0
+//{
+//    -MINUTE >= 60:
+//        ~ temp y = FLOOR(MINUTE / 60)
+//        ~ alter(HOUR, y)
+//        ~ MINUTE = MINUTE mod 60
+//}
+//}
+
+///
+//===function advancehour(hours)===
+//{ hours > 0.0:
+//    ~ alter(HOUR, hours)
+//    ~ hours = 0
+//{
+//    -HOUR >= 24:
+//        ~ temp y = FLOOR(HOUR / 24)
+//        ~ alter(DAY, y)
+//        ~ HOUR = HOUR mod 24
+//}
+//}
+
+///
+//===function advanceday(days)===
+//{ days > 0.0:
+//    ~ alter(DAY, days)
+//    ~ days = 0
+//{
+//    - MONTH == 1 && DAY >= 32:
+//        ~ temp y = FLOOR(DAY / 32)
+//        ~ alter(MONTH, y)
+//        ~ DAY = (DAY mod 31)
+//    - MONTH == 2 && DAY >= 30:
+//        ~ y = FLOOR(DAY / 30)
+//        ~ alter(MONTH, 1)
+//        ~ DAY = (DAY mod 29)
+//    - MONTH == 3 && DAY >= 32:
+//        ~ y = FLOOR(DAY / 32)
+//        ~ alter(MONTH, 1)
+//        ~ DAY = (DAY mod 31)
+//}
+//}
+
+
+===function advancetime(seconds, minutes, hours, days)===
+{ seconds > 0.0:
+    ~ alter(SECOND, seconds)
+    ~ seconds = 0
+{
+    -SECOND >= 60 || SECOND < 100:
+        ~ temp y = FLOOR(SECOND / 60)
+        ~ alter(MINUTE, y)
+        ~ SECOND = SECOND mod 60
+    -SECOND >= 100 || SECOND < 1000:
+        ~ y = FLOOR(SECOND / 60)
+        ~ alter(MINUTE, y)
+        ~ SECOND = SECOND mod 100
+}
+
+{ minutes > 0.0:
+    ~ alter(MINUTE, minutes)
+    ~ minutes = 0
+{
+    -MINUTE >= 60:
+        ~ y = FLOOR(MINUTE / 60)
+        ~ alter(HOUR, y)
+        ~ MINUTE = MINUTE mod 60
+}
+}
+
+{ hours > 0.0:
+    ~ alter(HOUR, hours)
+    ~ hours = 0
+{
+    -HOUR >= 24:
+        ~ y = FLOOR(HOUR / 24)
+        ~ alter(DAY, y)
+        ~ HOUR = HOUR mod 24
+}
+}
+
+{ days > 0.0:
+    ~ alter(DAY, days)
+    ~ days = 0
+{
+    - MONTH == 1 && DAY >= 32:
+        ~ y = FLOOR(DAY / 32)
+        ~ alter(MONTH, y)
+        ~ DAY = (DAY mod 31)
+    - MONTH == 2 && DAY >= 30:
+        ~ y = FLOOR(DAY / 30)
+        ~ alter(MONTH, 1)
+        ~ DAY = (DAY mod 29)
+    - MONTH == 3 && DAY >= 32:
+        ~ y = FLOOR(DAY / 32)
+        ~ alter(MONTH, 1)
+        ~ DAY = (DAY mod 31)
+}
+}
+}
+
+===function 30secs===
+{advancetime(30,0,0,0)}
+
+===function whatday===
+the {print_day(DAY)} of {print_month(MONTH)}
+
+===function whattimeDEBUG===
+It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
+
+===function whattime===
+It is {HOUR}:{MINUTE} on {whatday()}.
+
+===function currlocation(place)===
+~ playerlocation = place
+
+===function travel_time(destination)===
+// options for destination:
+// NR (Noviomagus Reginorum), villa (Fishbourne Palace), MD (Mai Dunn), forest (Mai Dunn forest), Bath, tavern (bath tavern), temple (Temple of Sulis Minerva)
+
+{
+  
+  -horserent == true || hashorse == true:
+    {
+    //Noviomagus Reginorum
+        - playerlocation == "NR" && destination == "MD":
+            ~ TRAVELTIME = INT(NR_MD*0.5)
+        - playerlocation == "NR" && destination == "Bath":
+            ~ TRAVELTIME = INT(NR_BATH*0.5)
+        - playerlocation == "NR" && destination == "villa":
+            ~ TRAVELTIME = INT(NR_VILLA*0.5)
+    //Mai Dunn
+        - playerlocation == "MD" && destination == "forest":
+            ~ TRAVELTIME = INT(MD_FOREST*0.5)
+        - playerlocation == "MD" && destination == "NR":
+            ~ TRAVELTIME = INT(NR_MD*0.5)
+        - playerlocation == "MD" && destination == "Bath":
+            ~ TRAVELTIME = INT(BATH_MD*0.5)
+    //Bath
+        - playerlocation == "Bath" && destination == "NR":
+            ~ TRAVELTIME = INT(NR_BATH*0.5)
+        - playerlocation == "Bath" && destination == "MD":
+            ~ TRAVELTIME = INT(BATH_MD*0.5)
+        - playerlocation == "Bath" && destination == "tavern":
+            ~ TRAVELTIME = INT(BATH_TAVERN*0.5)
+        - playerlocation == "Bath" && destination == "temple":
+            ~ TRAVELTIME = INT(BATH_TEMPLE*0.5)
+
+    }
+
+   -hasshoes == true:
+    {
+    //Noviomagus Reginorum
+        - playerlocation == "NR" && destination == "MD":
+            ~ TRAVELTIME = INT(NR_MD*0.9)
+        - playerlocation == "NR" && destination == "Bath":
+            ~ TRAVELTIME = INT(NR_BATH*0.9)
+        - playerlocation == "NR" && destination == "villa":
+            ~ TRAVELTIME = INT(NR_VILLA*0.9)
+    //Mai Dunn
+        - playerlocation == "MD" && destination == "forest":
+            ~ TRAVELTIME = INT(MD_FOREST*0.9)
+        - playerlocation == "MD" && destination == "NR":
+            ~ TRAVELTIME = INT(NR_MD*0.9)
+        - playerlocation == "MD" && destination == "Bath":
+            ~ TRAVELTIME = INT(BATH_MD*0.9)
+    //Bath
+        - playerlocation == "Bath" && destination == "NR":
+            ~ TRAVELTIME = INT(NR_BATH*0.9)
+        - playerlocation == "Bath" && destination == "MD":
+            ~ TRAVELTIME = INT(BATH_MD*0.9)
+        - playerlocation == "Bath" && destination == "tavern":
+            ~ TRAVELTIME = INT(BATH_TAVERN*0.9)
+        - playerlocation == "Bath" && destination == "temple":
+            ~ TRAVELTIME = INT(BATH_TEMPLE*0.9)
+
+    }
+    
+  -else:
+    {
+    //Noviomagus Reginorum
+        - playerlocation == "NR" && destination == "MD":
+            ~ TRAVELTIME = NR_MD
+        - playerlocation == "NR" && destination == "Bath":
+            ~ TRAVELTIME = NR_BATH
+        - playerlocation == "NR" && destination == "villa":
+            ~ TRAVELTIME = NR_VILLA
+    //Mai Dunn
+        - playerlocation == "MD" && destination == "forest":
+            ~ TRAVELTIME = MD_FOREST
+        - playerlocation == "MD" && destination == "NR":
+            ~ TRAVELTIME = NR_MD
+        - playerlocation == "MD" && destination == "Bath":
+            ~ TRAVELTIME = BATH_MD
+    //Bath
+        - playerlocation == "Bath" && destination == "NR":
+            ~ TRAVELTIME = NR_BATH
+        - playerlocation == "Bath" && destination == "MD":
+            ~ TRAVELTIME = BATH_MD
+        - playerlocation == "Bath" && destination == "tavern":
+            ~ TRAVELTIME = BATH_TAVERN
+        - playerlocation == "Bath" && destination == "temple":
+            ~ TRAVELTIME = BATH_TEMPLE
+
+    }
+
+}
+
+==function INV_CHECK===
+You have:
+{hasmoney == 0: No denarii}
+{hasmoney == 1: 1 denarius}
+{hasmoney >= 2: {hasmoney} denarii}
+{hassupplies == 0: No supplies}
+{hassupplies == 1: 1 pack of supplies}
+{hassupplies >= 2: {hassupplies} supplies}
+{hasherbs == 1: 1 pack of sleeping herbs}
+{hasherbs >= 2: {hasherbs} packs of sleeping herbs}
+{hascake == 1: 1 cake}
+{hascake >= 2: {hascake} cakes}
+{hasshoes == true: A nice pair of shoes}
+{horserent == true: A rented riding horse}
+{hashorse == true: Your own riding horse}
