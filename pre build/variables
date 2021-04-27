@@ -1,0 +1,74 @@
+// pronouns
+VAR PRONOUN1 = "they"
+VAR PRONOUN2 = "them"
+VAR PRONOUN3 = "their"
+VAR PRONOUN4 = "theirs"
+VAR PRONOUN5 = "themself"
+
+// time trackers
+VAR MONTH = 1
+VAR DAY = 1
+VAR HOUR = 6
+VAR HOURS = 0
+VAR MINUTE = 0
+VAR SECOND = 0
+CONST SLEEP_TIME = 22
+
+// easier to write lol
+CONST NR = "Noviomagus Reginorum"
+CONST VILLA = "Fishbourne Palace"
+
+// travel time trackers
+/// hours
+CONST NR_BATH = 30
+CONST NR_MD = 28
+CONST BATH_MD = 18
+/// minutes
+CONST NR_VILLA = 40
+CONST BATH_TAVERN = 20
+CONST BATH_TEMPLE = 22
+CONST MD_FOREST = 40
+
+// can access sublocations?
+VAR knowsforest = false
+VAR knowstavern = false
+VAR knowstemple = false
+
+VAR playerlocation = "opening"
+VAR playerdestination = "opening"
+// options for location:
+// NR (Noviomagus Reginorum), villa (Fishbourne Palace), MD (Mai Dunn), forest (Mai Dunn forest), Bath, tavern (bath tavern), temple (Temple of Sulis Minerva)
+
+VAR TRAVELTIME = 0
+VAR traveltimeunit = "minutes"
+
+// inventory
+VAR hasmoney = 0
+VAR hassupplies = 0
+VAR hasherbs = 0
+VAR hascake = 0
+VAR hasshoes = true
+VAR horserent = false
+VAR hashorse = false
+
+/// shop prices
+CONST SUPPLIESPRICE = 1
+CONST HERBSPRICE = 3
+CONST CAKEPRICE = 5
+CONST SHOESPRICE = 25
+CONST HORSERENTPRICE = 20
+CONST HORSEBUYPRICE = 200
+
+// opinions
+LIST LEGIONOP = poor, negative, neutral, (positive), great
+
+LIST LOCALSOP = poor, negative, neutral, (positive), great
+
+
+// clues and solutions
+CONST CLUEA = "someone went missing at Noviomagus Reginorum"
+CONST CLUEB = "other people are also going missing at Noviomagus Reginorum"
+CONST CLUEC = "there are strange plants growing near the disappearances"
+VAR CASE1SOLUTION = "nothing :)"
+
+
