@@ -58,12 +58,15 @@ You were tasked with the return of governor Sallustius Lucullus' nephew. In find
 Your only lead to continue this case is the description of a suspicious individual: a man, tattooed, in the old Celtic style for war.
 
 *[Continue]
+
     You travel to Mai Dunn, a large hillfort that commands over the surrounding countryside. It is ruled by Chief Boabaird, a Roman sympathiser and someone you have helped in the past.
  
 You enter the hillfort and approach the seat of power. Chief Boabaird stands and approaches, greeting you graciously.
 
 "What can I do for you?" he asks.
     -> Mai_Dunn.Boabaird_Opening
+
+
 
 ===Noviomagus_Reginorum===
 ->DONE
@@ -95,7 +98,7 @@ You enter the hillfort and approach the seat of power. Chief Boabaird stands and
 /// debugging tools
     // {travel_time("NR")}{TRAVELTIME}
     // {advancetime(0,0,0,0)} {whattimeDEBUG()}
-    ** [Open map]
+    ** [Open map] # CLEAR
         -> MAP
 
 
