@@ -1,3 +1,37 @@
+===sleep(sleepyn)===
+// to use: -> sleep ->
+    ~ temp leftovertime = (TRAVELTIME + HOUR) - 22
+{sleepyn >= 22:
+     {&You feel yourself getting tired. It is not hard to find a place to set up your camp - you lay down under the stars to rest.|You realise it is getting late, and decide to set up camp. The quiet noises of nocturnal creatures are your only company.|You know staying up longer is pointless - everyone is asleep, and you should be soon, too. Once you've set up camp, you watch the flickering coals of your fire as you drift off.}
+        {hasherbs >= 1:
+        {hasherbs == 1: You have 1 pack of sleeping herbs.}{hasherbs >= 2: You have {hasherbs} packs of sleeping herbs.} {hasherbs >=1: Do you want to use one to wake earlier?}
+            +[Yes]
+                {alter(hasherbs, -1)}{wakeytime("yes")}
+                {whattime()}
+                ->->
+            +[No]
+                {wakeytime("no")}
+                {whattime()}
+                {advancetime(0,0,leftovertime,1)}
+                {leftovertime}
+                {whattimeDEBUG()}
+                ->->
+        - else:
+            +[Go to sleep]
+                {wakeytime("no")}
+                {whattime()}
+                ->->
+        }
+        
+- else:
+    {traveltimeunit == "minutes": 
+        advancetime(0,TRAVELTIME,0,0)
+    - else:
+        advancetime(0,0,TRAVELTIME,0)
+        }
+    
+}
+
 ===MAP===
 <strong>MAP</strong>
 /// debug tools
@@ -53,21 +87,29 @@
     
 ===MAP_continue===
 {travel_check(playerdestination)}
+    ~ temp sleepyn = TRAVELTIME + HOUR
 + {playerdestination == "NR"}[Yes, continue]
+    -> sleep(sleepyn) ->
     ->Noviomagus_Reginorum
 + {playerdestination == "villa"}[Yes, continue]
+    -> sleep(sleepyn) ->
     ->Fishbourne_Palace
 + {playerdestination == "MD"}[Yes, continue]
+    -> sleep(sleepyn) ->
     ->Mai_Dunn
 + {playerdestination == "forest"}[Yes, continue]
+    -> sleep(sleepyn) ->
     ->MD_Forest
 + {playerdestination == "Bath"}[Yes, continue]
+    -> sleep(sleepyn) ->
     ->Bath
 + {playerdestination == "tavern"}[Yes, continue]
+    -> sleep(sleepyn) ->
     ->BathTavern
 + {playerdestination == "temple"}[Yes, continue]
+    -> sleep(sleepyn) ->
     ->SulisTemple
-+ [No, stay here]
++ [Go back]
     ->MAP
 /// location tracking
 /// {playerlocation == "NR" || playerlocation == "MD" || playerlocation == "Bath" || playerlocation == "FP" || playerlocation == "temple" || playerlocation == "forest" || playerlocation == "tavern"}
