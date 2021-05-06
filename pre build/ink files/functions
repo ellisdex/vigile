@@ -187,7 +187,7 @@
 //}
 
 ///
-//===function advanceday(days)===
+/// ===function advanceday(days)===
 //{ days > 0.0:
 //    ~ alter(DAY, days)
 //    ~ days = 0
@@ -221,6 +221,7 @@
         ~ y = FLOOR(SECOND / 60)
         ~ alter(MINUTE, y)
         ~ SECOND = SECOND mod 100
+}
 }
 
 { minutes > 0.0:
@@ -263,7 +264,7 @@
         ~ DAY = (DAY mod 31)
 }
 }
-}
+
 
 
 ===function 30secs===
@@ -426,3 +427,19 @@ You have:
 
 ===function travel_check(destination)===
 Travelling from {print_location(playerlocation)} to {print_location(playerdestination)} will take you {travel_time(playerdestination)}{TRAVELTIME} {traveltimeunit}. Continue?
+
+===function wakeytime(x)===
+{
+    - x == "yes":
+        ~ HOUR = 4
+        ~ MINUTE = 0
+        ~ SECOND = 0
+    - x == "no":
+        ~ HOUR = 6
+        ~ MINUTE = 0
+        ~ SECOND = 0
+}
+        
+
+/// ===function sleepchecktravel===
+/// You feel yourself getting tired while on the road. 
