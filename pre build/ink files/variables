@@ -45,7 +45,7 @@ VAR traveltimeunit = "minutes"
 // inventory
 VAR hasmoney = 0
 VAR hassupplies = 0
-VAR hasherbs = 0
+VAR hasherbs = 3
 VAR hascake = 0
 VAR hasshoes = true
 VAR horserent = false
