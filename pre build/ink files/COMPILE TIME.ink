@@ -1,44 +1,52 @@
 INCLUDE variables
 INCLUDE functions
-INCLUDE map n journal
+INCLUDE map n sleep
+INCLUDE journal
+
 
 
 
 # title: Vigile
 # author: Seeing Stone Games
 
-VAR DEBUG = false
+VAR DEBUG = true
 
 {DEBUG:
 	IN DEBUG MODE!
-	*	[Opening]	-> Opening
+	+	[Opening]	
+	    -> Opening
+	+   [Skip opening for map check]
+	    ~playerlocation = "MD"
+	    {advancetime(0,2,0,0)}
+	    ->MAP
+	    
 - else:
 	// First diversion: where do we begin?
  ->init
 }
 
 ===init===
-* [PLAY GAME]
++ [PLAY GAME]
     ->Pronouns
     
     
 ===Pronouns===
 Please choose your character's pronouns. 
-* [They/Them/Theirs] # CLEAR
++ [They/Them/Theirs] # CLEAR
     ~ PRONOUN1 = "they"
     ~ PRONOUN2 = "them"
     ~ PRONOUN3 = "their"
     ~ PRONOUN4 = "theirs"
     ~ PRONOUN5 = "themself"
     ->Opening
-* [She/Her/Hers] # CLEAR
++ [She/Her/Hers] # CLEAR
     ~ PRONOUN1 = "she"
     ~ PRONOUN2 = "her"
     ~ PRONOUN3 = "her"
     ~ PRONOUN4 = "hers"
     ~ PRONOUN5 = "herself"
     ->Opening
-* [He/Him/His] # CLEAR
++ [He/Him/His] # CLEAR
     ~ PRONOUN1 = "he"
     ~ PRONOUN2 = "him"
     ~ PRONOUN3 = "his"
@@ -53,11 +61,13 @@ It is the year 84 C.E.
 
 You are a <strong>vigile</strong>: an investigator hired by the Roman Legion and the elite to discover, solve and deal with mysterious happenings throughout the empire.
 
+Your <strong>journal</strong> is where you keep information relating to the cases you've solved and are investigating, as well as the clues you've discovered.
+
 You were tasked with the return of governor Sallustius Lucullus' nephew. In finding him, you uncovered the abduction was much larger than expected. People have been going missing from surrounding villages.
 
 Your only lead to continue this case is the description of a suspicious individual: a man, tattooed, in the old Celtic style for war.
 
-*[Continue]
++[Continue]
 
     You travel to Mai Dunn, a large hillfort that commands over the surrounding countryside. It is ruled by Chief Boabaird, a Roman sympathiser and someone you have helped in the past.
  
@@ -69,13 +79,31 @@ You enter the hillfort and approach the seat of power. Chief Boabaird stands and
 
 
 ===Noviomagus_Reginorum===
+{justbeenhospital == false:
+    {arrivaltime(playerdestination)}
+    -else:
+        ~ justbeenhospital = false
+}
+    ~ playerlocation = "NR"
 ->DONE
 
 ===Fishbourne_Palace===
+{justbeenhospital == false:
+    {arrivaltime(playerdestination)}
+    -else:
+        ~ justbeenhospital = false
+}
+    ~ playerlocation = "villa"
 ->DONE
 
 ===Mai_Dunn===
-
+{justbeenhospital == false:
+    {arrivaltime(playerdestination)}
+    -else:
+        ~ justbeenhospital = false
+}
+    ~ playerlocation = "MD"
+->DONE
 =Boabaird_Opening
 *(Boabaird_Ask_Tattooed)[Ask about the tattooed man] You ask about the tattooed man.
     The chieftan takes a moment to consider your description. You see him deliberating something, an internal conflict of some kind you think. Finally he seems to decide,
@@ -94,7 +122,8 @@ You enter the hillfort and approach the seat of power. Chief Boabaird stands and
     "A nearby village of mine, about half a day from here, has come to me with a problem," he says gravely.
     "There have been a spring of robberies throughout the village. Tensions are high as neighbour blames neighbour and I believe it is only a matter of time before someone is attacked, or killed, even. I believe the situation could do with some outside investigation. You hold no bias and will look at the facts objectively."
     -> Boabaird_Opening
-+{Boabaird_Ask_Tattooed || Boabaird_Ask_Job} [Thank Boabaird and be on your way] {30secs()} You thank the chief, leaving the hillfort behind you, and continue on the road. {currlocation("MD")} 
++{Boabaird_Ask_Tattooed || Boabaird_Ask_Job} [Thank Boabaird and be on your way] {30secs()} You thank the chief, leaving the hillfort behind you, and continue on the road. 
+        ~ playerlocation = "MD"
 /// debugging tools
     // {travel_time("NR")}{TRAVELTIME}
     // {advancetime(0,0,0,0)} {whattimeDEBUG()}
@@ -105,15 +134,39 @@ You enter the hillfort and approach the seat of power. Chief Boabaird stands and
 
 
 ===MD_Forest===
+{justbeenhospital == false:
+    {arrivaltime(playerdestination)}
+    -else:
+        ~ justbeenhospital = false
+}
+    ~ playerlocation = "forest"
 ->DONE
 
 ===Bath===
-{not Bath} You approach the Roman city of Bath, the grand structures are a welcome sign of civilisation in the colonies of Brittania. Strong foundations keep the city standing strong against all adversaries.
+{justbeenhospital == false:
+    {arrivaltime(playerdestination)}
+    -else:
+        ~ justbeenhospital = false
+}
+    ~ playerlocation = "Bath"
+{Bath <=1: You approach the Roman city of Bath, the grand structures are a welcome sign of civilisation in the colonies of Britannia. Strong foundations keep the city standing strong against all adversaries.}
 ->DONE
 
 ===BathTavern===
+{justbeenhospital == false:
+    {arrivaltime(playerdestination)}
+    -else:
+        ~ justbeenhospital = false
+}
+    ~ playerlocation = "tavern"
 ->DONE
 
 ===SulisTemple===
+{justbeenhospital == false:
+    {arrivaltime(playerdestination)}
+    -else:
+        ~ justbeenhospital = false
+}
+    ~ playerlocation = "temple"
 ->DONE
 
