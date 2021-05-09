@@ -34,6 +34,9 @@ VAR knowsforest = false
 VAR knowstavern = false
 VAR knowstemple = false
 
+VAR beenhospital = false
+VAR justbeenhospital = false
+
 VAR playerlocation = "opening"
 VAR playerdestination = "opening"
 // options for location:
@@ -43,13 +46,15 @@ VAR TRAVELTIME = 0
 VAR traveltimeunit = "minutes"
 
 // inventory
-VAR hasmoney = 0
-VAR hassupplies = 0
-VAR hasherbs = 3
+VAR hasmoney = 12
+VAR hassupplies = 5
+VAR hasherbs = 1
 VAR hascake = 0
 VAR hasshoes = true
 VAR horserent = false
 VAR hashorse = false
+
+VAR starving = 0
 
 /// shop prices
 CONST SUPPLIESPRICE = 1
