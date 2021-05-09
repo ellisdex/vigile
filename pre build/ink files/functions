@@ -1,6 +1,9 @@
 === function alter(ref x, k) ===
 ~ x = x + k
 
+=== function came_from(-> x) ===
+	~ return TURNS_SINCE(x) == 0
+
 === function print_num(x) ===
 { 
     - x >= 1000:
@@ -446,3 +449,33 @@ Travelling from {print_location(playerlocation)} to {print_location(playerdestin
 
 ===function arrivaltime(x)===
 You arrive at {print_location(x)} at {whattime("")}
+
+===function opinoncheck(x)===
+{
+    - x == "legion":
+    {
+        - LEGIONOP == LEGIONOP.poor:
+            ~pricemod = 1.2
+        - LEGIONOP == LEGIONOP.negative:
+            ~pricemod = 1.1
+        - LEGIONOP == LEGIONOP.neutral:
+            ~pricemod = 1
+        - LEGIONOP == LEGIONOP.positive:
+            ~pricemod = 0.9
+        - LEGIONOP == LEGIONOP.great:
+            ~pricemod = 0.8
+        }
+    - x == "locals":
+    {
+        - LOCALSOP == LOCALSOP.poor:
+            ~pricemod = 1.2
+        - LOCALSOP == LOCALSOP.negative:
+            ~pricemod = 1.1
+        - LOCALSOP == LOCALSOP.neutral:
+            ~pricemod = 1
+        - LOCALSOP == LOCALSOP.positive:
+            ~pricemod = 0.9
+        - LOCALSOP == LOCALSOP.great:
+            ~pricemod = 0.8
+        }
+}
