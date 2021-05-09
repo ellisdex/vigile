@@ -57,7 +57,7 @@ VAR hashorse = false
 VAR starving = 0
 
 /// shop prices
-CONST SUPPLIESPRICE = 1
+CONST SUPPLIESPRICE = 2
 CONST HERBSPRICE = 3
 CONST CAKEPRICE = 5
 CONST SHOESPRICE = 25
@@ -69,6 +69,7 @@ LIST LEGIONOP = poor, negative, neutral, (positive), great
 
 LIST LOCALSOP = poor, negative, neutral, (positive), great
 
+VAR pricemod = 1
 
 // clues and solutions
 CONST CLUEA = "someone went missing at Noviomagus Reginorum"
