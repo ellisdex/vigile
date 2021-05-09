@@ -276,12 +276,12 @@ the {print_day(DAY)} of {print_month(MONTH)}
 ===function whattimeDEBUG===
 It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
 
-===function whattime===
+===function whattime(x)===
 {
     - MINUTE <=9:
-        It is {HOUR}:0{MINUTE} on {whatday()}.
+        {x} {HOUR}:0{MINUTE} on {whatday()}.
     - else:
-        It is {HOUR}:{MINUTE} on {whatday()}.
+        {x} {HOUR}:{MINUTE} on {whatday()}.
 }
 
 ===function currlocation(place)===
@@ -443,3 +443,6 @@ Travelling from {print_location(playerlocation)} to {print_location(playerdestin
 
 /// ===function sleepchecktravel===
 /// You feel yourself getting tired while on the road. 
+
+===function arrivaltime(x)===
+You arrive at {print_location(x)} at {whattime("")}
