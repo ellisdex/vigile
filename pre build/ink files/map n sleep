@@ -61,12 +61,12 @@
         - playerlocation == "NR" && playerdestination == "MD":
             ~ halfdistance = NR_MD / 2
             {leftovertime <= halfdistance:
-                ~ playerlocation = "NR"
+                ~ playerlocation = "MD"
             }
         - playerlocation == "NR" && playerdestination == "Bath":
             ~ halfdistance = NR_BATH / 2
             {leftovertime <= halfdistance:
-                ~ playerlocation = "NR"
+                ~ playerlocation = "Bath"
             }
     //Mai Dunn
         - playerlocation == "MD" && playerdestination == "NR":
