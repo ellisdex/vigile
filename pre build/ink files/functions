@@ -123,6 +123,61 @@
         placeholder_month
 }
 
+===function cap_pronoun(x)===
+{
+  
+  -x == PRONOUN1:
+    {
+        - PRONOUN1 == "they":
+            They
+        - PRONOUN1 == "she":
+            She
+        - PRONOUN1 == "he":
+            He
+        }
+
+  -x == PRONOUN2:
+    {
+        - PRONOUN2 == "them":
+            Them
+        - PRONOUN2 == "her":
+            Her
+        - PRONOUN2 == "him":
+            Him
+        }
+
+  -x == PRONOUN3:
+    {
+        - PRONOUN3 == "their":
+            Their
+        - PRONOUN3 == "her":
+            Her
+        - PRONOUN3 == "his":
+            His
+        }
+
+  -x == PRONOUN4:
+    {
+        - PRONOUN4 == "theirs":
+            Theirs
+        - PRONOUN2 == "hers":
+            Hers
+        - PRONOUN2 == "his":
+            His
+        }
+
+  -x == PRONOUN5:
+    {
+        - PRONOUN5 == "themself":
+            Themself
+        - PRONOUN2 == "herself":
+            Herself
+        - PRONOUN2 == "himself":
+            Himself
+        }
+
+    }
+
 ===function print_location(x)===
 {
     - x == "NR":
@@ -139,6 +194,8 @@
         Bath Tavern
     - x == "temple":
         the Temple of Sulis Minerva
+    - x == "Crann":
+        {CRANNNAME}
 }
 
 /// ===function 30sec===
@@ -212,12 +269,13 @@
 
 
 ===function advancetime(seconds, minutes, hours, days)===
+~temp y = 0
 { seconds > 0.0:
     ~ alter(SECOND, seconds)
     ~ seconds = 0
 {
     -SECOND >= 60 || SECOND < 100:
-        ~ temp y = FLOOR(SECOND / 60)
+        ~ y = FLOOR(SECOND / 60)
         ~ alter(MINUTE, y)
         ~ SECOND = SECOND mod 60
     -SECOND >= 100 || SECOND < 1000:
@@ -292,7 +350,7 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
 
 ===function travel_time(destination)===
 // options for destination:
-// NR (Noviomagus Reginorum), villa (Fishbourne Palace), MD (Mai Dunn), forest (Mai Dunn forest), Bath, tavern (bath tavern), temple (Temple of Sulis Minerva)
+// NR (Noviomagus Reginorum), villa (Fishbourne Palace), MD (Mai Dunn), forest (Mai Dunn forest), Crann (Crann Locháinín), Bath, tavern (bath tavern), temple (Temple of Sulis Minerva)
 
 {
   
@@ -305,6 +363,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "NR" && destination == "Bath":
             ~ TRAVELTIME = INT(NR_BATH*0.5)
             ~ traveltimeunit = "hours" 
+        - playerlocation == "NR" && destination == "Bath":
+            ~ TRAVELTIME = INT(NR_BATH*0.5)
+            ~ traveltimeunit = "hours"
         - playerlocation == "NR" && destination == "villa":
             ~ TRAVELTIME = INT(NR_VILLA*0.5)
             ~ traveltimeunit = "minutes"
@@ -318,6 +379,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "MD" && destination == "forest":
             ~ TRAVELTIME = INT(MD_FOREST*0.5)
             ~ traveltimeunit = "minutes"
+        - playerlocation == "MD" && destination == "Crann":
+            ~ TRAVELTIME = INT(MD_CRANN*0.5)
+            ~ traveltimeunit = "hours"
     //Bath
         - playerlocation == "Bath" && destination == "NR":
             ~ TRAVELTIME = INT(NR_BATH*0.5)
@@ -325,7 +389,13 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "Bath" && destination == "MD":
             ~ TRAVELTIME = INT(BATH_MD*0.5)
             ~ traveltimeunit = "hours"
+        - playerlocation == "Bath" && destination == "Crann":
+            ~ TRAVELTIME = INT(BATH_CRANN*0.5)
+            ~ traveltimeunit = "hours"
         - playerlocation == "Bath" && destination == "tavern":
+            ~ TRAVELTIME = INT(BATH_TAVERN*0.5)
+            ~ traveltimeunit = "minutes"
+        - playerlocation == "tavern" && destination == "Bath":
             ~ TRAVELTIME = INT(BATH_TAVERN*0.5)
             ~ traveltimeunit = "minutes"
         - playerlocation == "Bath" && destination == "temple":
@@ -343,6 +413,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "NR" && destination == "Bath":
             ~ TRAVELTIME = INT(NR_BATH*0.9)
             ~ traveltimeunit = "hours"
+        - playerlocation == "Bath" && destination == "Crann":
+            ~ TRAVELTIME = INT(NR_CRANN*0.9)
+            ~ traveltimeunit = "hours"
         - playerlocation == "NR" && destination == "villa":
             ~ TRAVELTIME = INT(NR_VILLA*0.9)
              ~ traveltimeunit = "minutes"
@@ -356,6 +429,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "MD" && destination == "forest":
             ~ TRAVELTIME = INT(MD_FOREST*0.9)
             ~ traveltimeunit = "minutes"
+        - playerlocation == "MD" && destination == "Crann":
+            ~ TRAVELTIME = INT(MD_CRANN*0.9)
+            ~ traveltimeunit = "hours"
     //Bath
         - playerlocation == "Bath" && destination == "NR":
             ~ TRAVELTIME = INT(NR_BATH*0.9)
@@ -363,7 +439,13 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "Bath" && destination == "MD":
             ~ TRAVELTIME = INT(BATH_MD*0.9)
             ~ traveltimeunit = "hours"
+        - playerlocation == "Bath" && destination == "Crann":
+            ~ TRAVELTIME = INT(BATH_CRANN*0.9)
+            ~ traveltimeunit = "hours"
         - playerlocation == "Bath" && destination == "tavern":
+            ~ TRAVELTIME = INT(BATH_TAVERN*0.9)
+            ~ traveltimeunit = "minutes"
+        - playerlocation == "tavern" && destination == "Bath":
             ~ TRAVELTIME = INT(BATH_TAVERN*0.9)
             ~ traveltimeunit = "minutes"
         - playerlocation == "Bath" && destination == "temple":
@@ -381,6 +463,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "NR" && destination == "Bath":
             ~ TRAVELTIME = NR_BATH
             ~ traveltimeunit = "hours"
+        - playerlocation == "NR" && destination == "Crann":
+            ~ TRAVELTIME = NR_CRANN
+            ~ traveltimeunit = "hours"
         - playerlocation == "NR" && destination == "villa":
             ~ TRAVELTIME = NR_VILLA
             ~ traveltimeunit = "minutes"
@@ -394,6 +479,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "MD" && destination == "Bath":
             ~ TRAVELTIME = BATH_MD
             ~ traveltimeunit = "hours"
+        - playerlocation == "MD" && destination == "Crann":
+            ~ TRAVELTIME = MD_CRANN
+            ~ traveltimeunit = "hours"
     //Bath
         - playerlocation == "Bath" && destination == "NR":
             ~ TRAVELTIME = NR_BATH
@@ -401,7 +489,13 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "Bath" && destination == "MD":
             ~ TRAVELTIME = BATH_MD
             ~ traveltimeunit = "hours"
+        - playerlocation == "Bath" && destination == "Crann":
+            ~ TRAVELTIME = BATH_CRANN
+            ~ traveltimeunit = "hours"
         - playerlocation == "Bath" && destination == "tavern":
+            ~ TRAVELTIME = BATH_TAVERN
+            ~ traveltimeunit = "minutes"
+        - playerlocation == "tavern" && destination == "Bath":
             ~ TRAVELTIME = BATH_TAVERN
             ~ traveltimeunit = "minutes"
         - playerlocation == "Bath" && destination == "temple":
@@ -429,7 +523,7 @@ You have:
 {hashorse == true: Your own riding horse}
 
 ===function travel_check(destination)===
-Travelling from {print_location(playerlocation)} to {print_location(playerdestination)} will take you {travel_time(playerdestination)}{TRAVELTIME} {traveltimeunit}. Continue?
+Travelling from {print_location(playerlocation)} to {print_location(playerdestination)} will take you {travel_time(playerdestination)}{TRAVELTIME} {traveltimeunit}. {horserent == true: You have rented a horse for this journey.} Continue?
 
 ===function wakeytime(x)===
 {
@@ -476,6 +570,19 @@ You arrive at {print_location(x)} at {whattime("")}
         - LOCALSOP == LOCALSOP.positive:
             ~pricemod = 0.9
         - LOCALSOP == LOCALSOP.great:
+            ~pricemod = 0.8
+        }
+    - x == "Heliwr":
+    {
+        - HELIWROP == HELIWROP.poor:
+            ~pricemod = 1.2
+        - HELIWROP == HELIWROP.negative:
+            ~pricemod = 1.1
+        - HELIWROP == HELIWROP.neutral:
+            ~pricemod = 1
+        - HELIWROP == HELIWROP.positive:
+            ~pricemod = 0.9
+        - HELIWROP == HELIWROP.great:
             ~pricemod = 0.8
         }
 }
