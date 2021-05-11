@@ -7,7 +7,7 @@ VAR PRONOUN5 = "themself"
 
 // time trackers
 VAR MONTH = 1
-VAR DAY = 1
+VAR DAY = 22
 VAR HOUR = 6
 VAR HOURS = 0
 VAR MINUTE = 0
@@ -27,6 +27,11 @@ CONST BATH_MD = 18
 CONST MD_CRANN = 3
 CONST NR_CRANN = 26
 CONST BATH_CRANN = 18
+
+CONST MD_VILLAGE = 12
+CONST NR_VILLAGE = 19
+CONST BATH_VILLAGE = 13
+
 /// minutes
 CONST NR_VILLA = 40
 CONST BATH_TAVERN = 20
@@ -34,9 +39,13 @@ CONST BATH_TEMPLE = 22
 CONST MD_FOREST = 40
 
 //knows things
+VAR daytalktoboabaird = 1
+VAR arrestsuspect = ""
+VAR seesmacdudd = false
 VAR knowcaitrionaname = false
 
 // can access sublocations?
+VAR knowsvillage = false
 VAR knowsforest = false
 VAR knowscrann = false
 VAR knowstavern = false
