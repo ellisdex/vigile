@@ -13,7 +13,7 @@ VAR DEBUG = true
 
 {DEBUG:
 	IN DEBUG MODE!
-	+	[Opening]	
+	+	[Opening]
 	    -> Opening
 	+   [Skip opening for map check]
 	    ~playerlocation = "MD"
@@ -24,6 +24,8 @@ VAR DEBUG = true
 	    {alter(hassupplies, -2)}
 	    {advancetime(0,0,0,2)}
 	    ->Mai_Dunn.Boabaird_2
+	+   [crann forest]
+	    ->CrannForest
 	    
 - else:
 	// First diversion: where do we begin?
@@ -66,7 +68,7 @@ It is the year 84 C.E.
 
 You are a <strong>vigile</strong>: an investigator hired by the Roman Legion and the elite to discover, solve and deal with mysterious happenings throughout the empire.
 
-Your <strong>journal</strong> is where you keep information relating to the cases you've solved and are investigating, as well as the clues you've discovered.
+//Your <strong>journal</strong> is where you keep information relating to the cases you've solved and are investigating, as well as the clues you've discovered; your <strong>map</strong> is where you can choose which direction you follow the threads of the case towards.
 
 You were tasked with the return of governor Sallustius Lucullus' nephew. In finding him, you uncovered the abduction was much larger than expected. People have been going missing from surrounding villages.
 
@@ -76,9 +78,9 @@ Your only lead to continue this case is the description of a suspicious individu
 
     You travel to Mai Dunn, a large hillfort that commands over the surrounding countryside. It is ruled by Chief Boabaird, a Roman sympathiser and someone you have helped in the past.
  
-You enter the hillfort and approach the seat of power. Chief Boabaird stands and approaches, greeting you graciously.
+    You enter the hillfort and approach the seat of power. Chief Boabaird stands and approaches, greeting you graciously.
 
-"What can I do for you?" he asks.
+    "What can I do for you?" he asks.
     -> Mai_Dunn.Boabaird_Opening
 
 
@@ -108,7 +110,7 @@ You enter the hillfort and approach the seat of power. Chief Boabaird stands and
 ->DONE
 
 ===Mai_Dunn===
-{justbeenhospital == false:
+{justbeenhospital == false && playerlocation !="MD":
     {arrivaltime(playerdestination)}
     -else:
         ~ justbeenhospital = false
@@ -117,11 +119,16 @@ You enter the hillfort and approach the seat of power. Chief Boabaird stands and
     ~ horserent = false
 }
     ~ playerlocation = "MD"
-You return to Mai Dunn.
-+{not Boabaird_Opening}[Approach Boabaird]
+    //{whattimeDEBUG()}
+
++{not Boabaird_Opening && not Boabaird_2}[Approach Boabaird]
     ->Boabaird_Opening
-+{Boabaird_Opening} [Approach Boabaird]
++{Boabaird_Opening && not Boabaird_2} [Approach Boabaird]
     ->Boabaird_2
++{Boabaird_2 && not Boabaird_3 && BathTavern.GuardsSitch} [Approach Boabaird]
+    ->Boabaird_3
++{Boabaird_3 && not Boabaird_4 && DAY <= 25 && MONTH == 1} [Approach Boabaird]
+    ->Boabaird_4
 +[Open map]
     ->MAP
 ->DONE
@@ -154,18 +161,39 @@ You return to Mai Dunn.
 The Chief awaits your return, greeting you graciously when you enter.
 
 "Vigile. What is it you need from me today?"
-*[Ask if he has news about the man with tattoos]
+*[Ask if he has news about the man with tattoos]{30secs()}
     "Do you have news on the tattooed man?" you ask.
     "As a matter of fact I do," the chief says warily. "Some of my people have reported seeing an individual matching your descriptions around Bath. They are not sure how long they will linger there, but the tattooed man is there now."
-    **[Thank Boabaird and be on your way.]
+    **[Thank Boabaird and be on your way.]{30secs()}
         You exit the hill fort again, wondering how long it will be before you are brought back once again by your investigations.
     ->MAP
-
-
-
+=Boabaird_3
+When you enter Mai Dunn, the chief looks tired. He greets you courteously.
+    *[Tell him what you learnt from {BathTavern.Macdudd_Invite:Macdudd|Macdudd's room}] You tell him what you've learnt so far.{30secs()}
+        His brow furrows at the mention of the abductions. “There are more reported missing every day. I hope you’re close to solving this.”
+        **[“I need information on a plant."]  “I need information on a plant. It might be nothing, or it might be the key to all of this, I won’t know until I can talk to an expert.” {30secs()}
+            The Chief thinks for a moment before answering. “Heliwr can help with that, I’d think, or if he can’t he’d know who can. I know you've been before, but I can point out his house on your map again for you."
+            ~knowsforest = true
+            ***[Thank him and take your leave] As you take your leave, Boabaird stops you.  “Make sure you catch these buggers soon. They're a dangerous bunch so be careful.” {30secs()}
+                ->Mai_Dunn
+    *[Return]
+        ->Mai_Dunn
+=Boabaird_4
+Boabaird looks as though he has been expecting you, and nods his head as you approach.
+"Good, it’s you, vigile. Just the person I need right now."
+    *"What's the issue?"
+        "Something’s happening in Crann Locháinín, a nearby forest. Every day I’ve got someone telling me they saw or heard something unnatural out that way. Go and take a look, would you? Put people at ease if it’s nothing, sort it out if it isn’t."
+        ~knowscrann = true
+        -(opts)
+            **"Probably druids."
+                "Aye? More reason for you to go and do your job then."
+                ->opts
+            **"I'll take a look."
+                You nod to him and take your leave.
+                ->Mai_Dunn
 
 ===MD_Forest===
-{justbeenhospital == false:
+{justbeenhospital == false && playerlocation !="forest":
     {arrivaltime(playerdestination)}
     -else:
         ~ justbeenhospital = false
@@ -174,7 +202,159 @@ The Chief awaits your return, greeting you graciously when you enter.
     ~ horserent = false
 }
     ~ playerlocation = "forest"
+{!Making your way into the woods, the silence is heavy and foreboding. You’re sure that whatever the plants are linked with will be coming to a head soon and you hope that you are in time to prevent it. You finally come across Heliwr’s cabin. There is still some damage caused by the Legion from a previous case of yours. You hope that Heliwr will still be willing to help. ->Heliwr_Vervain|->Heliwr_Normal}
+    
+    
+=Heliwr_Vervain
+Heliwr greets you politely but not friendly. He is curt and prickly while talking to you. Though he still seems as though he wants to help with the disappearances. 
+    *[Give plant sample] You hand him a clipping of the mysterious plants. “The Chief said you could tell me about this.”
+    The hunter examines the plant with interest, looking at the flowers, the stem and the leaves carefully. “Aye, that I can. It’s called vervain. Shouldn’t see it this early in the year, really. Sought after by medicine women and.. Druidic types. That what brought you here, then? Think it’s got something to do with the disappearances?”
+        **[You say yes]“I think it’s no coincidence it keeps showing up wherever I look. And thank you for confirming it’s unseasonal: that rules out coincidence entirely, I’d say.”
+            ->Heliwr_Normal
+        **[You say you're not sure]"I don't think I can be certain quite yet, but it's worth looking into."
+            ->Heliwr_Normal
+=Heliwr_Normal
+"Can I help you with anything{came_from(-> Heliwr_Vervain): else}, vigile?"
+-(opts)
+    +[Purchase sleeping herbs]
+    {HELIWROP == HELIWROP.positive || HELIWROP == HELIWROP.great: Your {HELIWROP} relationship with Heliwr has encouraged him to discount your prices{HELIWROP == HELIWROP.positive: slightly}, in return for your help.}
+    {HELIWROP == HELIWROP.negative || HELIWROP == HELIWROP.poor: Your {HELIWROP} relationship with Heliwr has caused him to dislike you, increasing your prices{HELIWROP == HELIWROP.negative: slightly}. He looks reluctant to be parting with the herbs at all.}
+    {opinoncheck("Heliwr")}
+    You have {hasmoney == 0: no money}{hasmoney == 1: 1 denarius}{hasmoney >= 2: {hasmoney} denarii}.
+    //{pricemod}
+    Sleeping herbs: {INT(HERBSPRICE*pricemod)} denarii each
+    ~temp itemcost = INT(HERBSPRICE*pricemod)
+        ++{hasmoney >= itemcost} [1 ({itemcost} {itemcost >=1: denarii}{itemcost <1: denarius})]
+            {alter(hasmoney,-itemcost)}
+            {alter(hasherbs,1)}
+            You buy 1 pack of herbs. You have {hasmoney == 0:no denarii}{hasmoney == 1:1 denarius} {hasmoney >= 2: {hasmoney} denarii} left.
+            ->opts
+        ++{hasmoney >= itemcost*5}[5 ({itemcost*5} denarii)]
+            {alter(hasmoney,-itemcost*5)}
+            {alter(hasherbs,5)}
+            You buy 5 packs of herbs. You have {hasmoney == 0:no denarii}{hasmoney == 1:1 denarius} {hasmoney >= 2: {hasmoney} denarii} left.
+            ->opts
+        ++{hasmoney >= itemcost*10}[10 ({itemcost*10} denarii)]
+            {alter(hasmoney,-itemcost*10)}
+            {alter(hassupplies,10)}
+            You buy 10 packs of herbs. You have {hasmoney == 0:no denarii}{hasmoney == 1:1 denarius} {hasmoney >= 2: {hasmoney} denarii} left.
+            ->opts
+    +[Return to map] 
+        ->MAP
 ->DONE
+
+===CrannForest===
+{justbeenhospital == false && playerlocation !="Crann":
+    {arrivaltime(playerdestination)}
+    -else:
+        ~ justbeenhospital = false
+}
+{horserent == true:
+    ~ horserent = false
+}
+    ~ playerlocation = "Crann"
+    
+{!There are no well-trodden paths through Crann Locháinín. You make your way under ash and beech and yew and pine until the border of the forest is far behind you. The sun is {HOUR <= 8:rising}{HOUR > 8 && HOUR < 18:lingering}{HOUR >= 18: falling} above the canopy, casting light through the gaps between branch and leaf. ->search|}
+
+=search
+*(woods)[Search the woods.] {advancetime(0,0,1,0)}
+    You spend a good deal of time passing through the glades, weaving as steady a path as you can manage between the trees. In a clearing you find signs of a camp, the firepit still ashen and dead branches broken from the trees for firewood, now no more than charcoal. Someone is out here beyond doubt.
+    {HOUR <18:->search}
+    {HOUR >=18:->conclude}
+*(flowers)[Note the flowers.] {advancetime(0,0,1,0)}
+    You notice Vervain, of course, and more besides. It’s fast approaching spring, but even so it’s odd how each footfall lands on a new flower, and how the flowers spring back as you continue, masking your steps. You won’t be able to track effectively in these conditions.
+    {HOUR <18:->search}
+    {HOUR >=18:->conclude}
+*(trees)[Inspect the trees.] {advancetime(0,0,1,0)}
+    Some of the trees bear symbols, carved into the bark. You recognise the triquetra, a three cornered knot. It likely bears some ritual significance beyond your knowledge, but it’s a sure sign you’re on the right trail.
+    {HOUR <18:->search}
+    {HOUR >=18:->conclude}
+*{HOUR < 18 && woods && flowers && trees}[Continue searching.] 
+    ~ HOUR = 18
+    You continue to investigate woodlands of Crann Locháinín until the sun gets low in the sky, but find nothing more of note.
+    ->conclude
+=conclude
+    It seems you have found all you will while the sun still sheds enough light to see, and that you can only report back to Chief Bobaird a confirmation of his subjects’ suspicion.
+    *[Leave Crann Locháinín]
+        The sun sets in the west, and the forest’s border is eastwards. It should be no hard task to walk with your lengthening shadow forwards until you reach more familiar environs. 
+            **Stop.
+                ***Did you hear that?
+                    Branches breaking, footsteps that are not your own. All manner of beasts might haunt and hunt here, and none you wish to meet.
+                    ****[Walk faster] You pick up your pace, struggling not to stumble over roots and weeds in the increasing dark. You cast your eyes behind you and see nothing: there is nothing ahead of you either, nor to the left, nor right.
+                        *****[Faster still]Caution to the wind, you break into a jolting sprint, leaping through the undergrowth. You will not die here, you will not
+                            ******<strong>THUD</strong>
+                                You run straight into something. It’s not a tree because as you fall, so does it. You gasp and yell, and it releases a string of curses in Gaelic. 
+                                    *******[...]# CLEAR
+                                        ->senses
+                                
+=senses
+*[Come to your senses]
+    Three specks of piercing orange light coalesce into torches carried by hooded and robed figures. You can’t make out faces, except for one: the girl you ran into, who is picking herself up from the ground, and spins round towards you with fierce intent. Her accent is thick, but you can make out enough of it if you try.
+    **[Look at her]
+        She’s rather beautiful, you realise. Red hair and soft, fair skin. Sharp eyes. Light from the torches dances across her features. And she’s talking to you. By Hercules, she’s talking to you and you haven’t heard a word of it. You’re a fool and you’re probably about to die.
+        
+        You have just enough wits about you to know to splutter your reply in Gaelic, but from the looks of your hooded friends you might as well have spoken Greek. "{cap_pronoun(PRONOUN1)} must have hit {PRONOUN3} head," one figure declares. And, suddenly, you are being lifted to your feet.
+            ->lookit
+    **[Focus on the words]
+        You are not fluent in Gaelic, but you know enough to get you through this, you’re sure. You let her berate you without interruption, then realise she’s asking you a question: Who are you? What are you doing out here?
+            ->whatdoing
+            
+=lookit
+*[Try to leave]
+    You turn to go, but feel a hand quickly and firmly on your shoulder. "Wrong way, friend."
+        ->lookit
+*[Stay still]
+~ knowcaitrionaname = true
+"It’s okay, stranger," the woman says. "My name’s Caitriona. I’ll see ye right."
+        ->cultistcamp
+
+=whatdoing
+*[Lie]
+    It’s not too much of a stretch. You got lost in the woods, that part’s even true, whilst looking for... the camp, of course. These people must be going somewhere, so you pretend you’re going there too.
+    They seem to believe you. Maybe. It’s hard to tell with the hoods. But they aren’t moving to hurt you. Yet, at least. 
+    "Come with us," one of them says, and you realise you don’t really have a choice in the matter, so you follow them back deeper into Crann Locháinín.
+        ->cultistcamp
+*[Tell the truth]
+    If you are to die, you are to die an honest man. A Vigile. A servant of Rome. They probably won’t take kindly to this. Are you sure?
+        **Moriuntur Omnes. All men must die.
+            ->SulisTemple.Sacrifice_Ending
+        **Volo vivere! I want to live!
+            ->whatdoing
+
+*[Try to leave]
+    This is bad, and not where you intended to be. You get up and turn to leave, but each way you turn the hooded figures hem you in. You can’t run, not unless they choose to let you go.
+            ->whatdoing
+            
+=cultistcamp
+{knowcaitrionaname == true:Caitriona|The woman} and her hooded friends lead you through the trees, lighting the way with torches until you reach a verdant glade where long tables have been set out. You hear it before you see it, the sounds of perhaps a dozen or so overlapping voices at the feast. Platters of meats and fruit and bread have been laid out, and those in attendance are happily eating their share. Caitriona leads you to a chair, sits, and reaches for an apple. There is a lull in urgent activity and your life doesn’t seem immediately at risk: perhaps now would be a good time to ask your new friend a few questions.
+-(askquestions)
+    *(where)"Where are you from?"
+        "North," she says, as if that’s all the answer you could require. The mischief of her smile tells you she won’t say more.
+            {(how && not who)||(who && not how):->2questions->}
+            {who && how && where: ->chossachspeech}
+            ->askquestions
+    *(how)"How much longer do we have to wait?"
+        "I’m not sure, but it can’t be too long. In fact, my money would be on us getting told tonight, so just hold on a wee bit longer and we’ll both have the answer."
+            {(where && not who)||(who && not where):->2questions->}
+            {who && how && where: ->chossachspeech}
+            ->askquestions
+    *(who)"Who’s that?"
+        You gesture towards a table set apart from the others. "That," Caitriona replies, "Is the Chossach. She’s amazing: without her I don’t think much of this would be possible. She got us all together, got all of this food, kept us all safe, and, of course, she’s going to lead everything when the time comes."
+            {(how && not where)||(where && not who):->2questions->}
+            {who && how && where: ->chossachspeech}
+            ->askquestions
+
+=chossachspeech
+The glade bursts into clamour, fists hammered against the wood tables and voices raised to cheer and shout. The Chossach has risen from their seat and looks likely to address the adoring crowd. She stretches out her arms, and the noise dies.
+	"Welcome, friends, old and new, children of the Old Ways. Too long has the yoke of Roman rule hung from our necks. Too long have our people, our cultures been cast into the flame, and for what? Nothing!
+	No longer: no longer. I know you’ve all been very patient, and I thank you all for that, each and every one of you. But now it is finally time. Imbolc dawns upon us, and with it a new hope for a new start, with no rule but our own.
+	The invaders think they can steal our land and defile our gods with theirs. This is where we will strike them. Our goddess Sulis has been shackled to their weak goddess Minerva at the temple in Bath. With sacrifices of Roman scum and honoured faithful servants of the true gods, we will free her. And when we do, her vengeance will be fierce."
+	->DONE
+	
+=2questions
+"I think everybody’s here now, it shouldn’t be long until we get a speech," Caitriona says. You don’t have much more time to talk to her.
+->->
+
 
 ===Bath===
 {justbeenhospital == false && playerlocation != "Bath":
@@ -188,23 +368,20 @@ The Chief awaits your return, greeting you graciously when you enter.
     ~ playerlocation = "Bath"
 {not Bath.Bath_Opening: ->Bath_Opening->}
 
-*{HOUR <= 14}[Explore the city (8 hours)]
+*{HOUR <= 14 && DAY <= 27 && MONTH == 1 && Mai_Dunn.Boabaird_2}[Search the city for the tattooed man (8 hours)]
     {advancetime(0,0,8,0)}
-    {whattimeDEBUG()}
-    You explore the city, taking in the surroundings. Although the city is Roman in design, the closer you look the more you can see influences of Britannia, small establishments built around the Roman structures. More obvious, though, is the people. Many are Celts and people of Brittania - it is obvious in the way they dress and act and how they congregate. After some time exploring, you spot something: a tavern, clearly Celtic-run, and you see a few men with tattoos duck inside.
-    Your eyes immediately follow on the man with tattoos. It's him. You're sure of it.
-    It appears as though there are a number of brutish-looking individuals stood guard at the door, however, seemingly his underlings.
-    It is now a matter of how to handle this situation.
-
-        ~knowstavern = true
-        ->BathTavern.GuardsSitch
+    You explore the city, taking in the surroundings. Although the city is Roman in design, the closer you look the more you can see influences of Britannia, small establishments built around the Roman structures. More obvious, though, is the people. Many are Celts and people of Brittania - it is obvious in the way they dress and act and how they congregate. {DAY <= 27 && MONTH == 1: After some time exploring, you spot something: a tavern, clearly Celtic-run, and you see a few people duck inside. <p></p>Your eyes are immediately drawn to the man with tattoos. It's the man you're looking for. You're sure of it.<p></p>It appears as though there are a number of brutish-looking individuals stood guard at the door, however, seemingly his underlings.<p></p>It is now a matter of how to handle this situation. ->BathTavern.GuardsSitch}
+        {DAY >= 28 && MONTH == 1: Despite your dedication to the search, you find nothing - no trace of the man anywhere. ->Bath}
+        {MONTH != 1: Despite your dedication to the search, you find nothing - no trace of the man anywhere. ->Bath}
+        
 *(find_shop_Bath)[Find a shop (30 minutes)]
     {advancetime(0,30,0,0)}
     You manage to find a local store which has a variety of items for purchase. The owner is Roman.
     ->Bath_Store
 +{find_shop_Bath}[Go to the store]
-
     ->Bath_Store
++[Open map]
+    ->MAP
 =Bath_Store
 {Bath_Store >=2: You return to the store.}
 {LEGIONOP == LEGIONOP.positive || LEGIONOP == LEGIONOP.great: Your {LEGIONOP} relationship with the legion has encouraged the shopkeeper to discount your prices{LEGIONOP == LEGIONOP.positive: slightly}, in honour of your service.}
@@ -320,10 +497,12 @@ You approach the Roman city of Bath, the grand structures are a welcome sign of 
 }
     ~ playerlocation = "tavern"
     
-->DONE
++[Open map]
+    ->MAP
 
 =GuardsSitch
-
+ ~knowstavern = true
+ ~ playerlocation = "tavern"
 *[Talk to his soldiers and get them to leave you some time alone with their boss]{30secs()}
     You approach the soldiers outside the inn, the tattooed man somewhere inside. They watch you as you approach, hands fingering various Celtic weapons, eyes full of menace.
 
@@ -402,7 +581,7 @@ You approach the Roman city of Bath, the grand structures are a welcome sign of 
     ->Macdudd_Invite
 
 *"Why are there plants at every abduction site?" {30secs()}
-    "They are a side effect of the druids and their magic. It has some link to the ritual being planned." He says this calmly and without blinking an eye, even while talking of druids and magic and other absurd things. You still believe he is telling the truth, however.
+    "The Vervain is a side effect of the druids and their magic. It has some link to the ritual being planned." He says this calmly and without blinking an eye, even while talking of druids and magic and other absurd things. You still believe he is telling the truth, however.
     ->Macdudd_Invite
     
 *  -> Macdudd_Ritual
@@ -415,7 +594,7 @@ You approach the Roman city of Bath, the grand structures are a welcome sign of 
     
     This lead has proved to be very useful. You have a deadline to meet before the ritual and have discovered a much wider plot than you first realised. The next place to look should probably be after the druids. Perhaps looking into the Vervain plants more will lead you in the right direction.
 
-    
+    ->MAP
 ->DONE
 
 =Fail_day1
@@ -446,28 +625,29 @@ You decide to wait a day, hoping for more luck, and spend your time before sleep
 
         "As for his job, I couldn't say, but if his thugs gave any clue, I would say he's in a violent one."
         ->inkeep_macdudd_qs
-    *(invmacduddmeetings)"Did he ever meet with anyone?"
+    *(invmacduddmeetings)"Did he ever meet with anyone?" {30secs()}
         "Aside from his goons I'm not sure. He did often leave the establishment alone and come back an hour or so later. Could be he was meeting with someone then, but never here."
         ->inkeep_macdudd_qs
     *{not investigate_macdudd_room && askmacduddname && invmacduddmeetings} You ask the innkeeper if you can investigate Macdudd's room.  ->investigate_macdudd_room
     * -> 
         You thank the inkeeper for their time and continue on your way. ->Bath
 =investigate_macdudd_room
-{!"Of course." The man says. He leads you up to the room and lets you in.<p></p>You stand in the room and take in your surroundings. There is an uncomfortable looking straw bed at one end of the room. A wardrobe in another corner. Next to the wardrobe is a table, a fallen chair under it. At the foot of the bed is a chest. The room looks as though it was left in a hurry.|}
-    *(invmacduddbed)[Investigate the bed]
+"Of course." The man says. He leads you up to the room and lets you in.
+You stand in the room and take in your surroundings. There is an uncomfortable looking straw bed at one end of the room. A wardrobe in another corner. Next to the wardrobe is a table, a fallen chair under it. At the foot of the bed is a chest. The room looks as though it was left in a hurry.
+-(opts)
+    *(invmacduddbed)[Investigate the bed] {advancetime(0,3,0,0)}
         You look in and around the bed. While it is a mess there appears to be no trace left behind of {askmacduddname: Macdudd|the man}.
-        ->investigate_macdudd_room
-
-    *(invmacduddwardrobe)[Search the wardrobe]
+        ->opts
+    *(invmacduddwardrobe)[Search the wardrobe] {advancetime(0,3,0,0)}
         You open the wardrobe. It is empty. Nothing has been left behind. You check for a false panel, a loose bit of wood and find nothing. That is until you are about to close the door. on the edge of the door is inscribed a tiny rune denoting the month of Februarius.
-        ->investigate_macdudd_room
-    *(invmacduddtable)[Investigate the table]
+        ->opts
+    *(invmacduddtable)[Investigate the table] {advancetime(0,3,0,0)}
         Looking around the table you find very little. You are about to give up looking when you see a small plant sprouting from behind the table. Vervain.
-        ->investigate_macdudd_room
-    *(invmacduddchest)[Open the chest]
+        ->opts
+    *(invmacduddchest)[Open the chest] {advancetime(0,3,0,0)}
         You open the chest. Inside is a scrap of parchment, overlooked in the clearing. It is a portion of map that shows highlighted areas. They link to ones you already know people to have been abducted.
-        ->investigate_macdudd_room
-    *{not inkeep_macdudd_qs && invmacduddbed && invmacduddwardrobe && invmacduddtable && invmacduddchest} You ask the innkeeper some questions about the man.  ->inkeep_macdudd_qs
+        ->opts
+    *{not inkeep_macdudd_qs && invmacduddbed && invmacduddwardrobe && invmacduddtable && invmacduddchest} [Ask the inkeeper questions about the man] You ask the innkeeper some questions about the man.  ->inkeep_macdudd_qs
     * -> 
         You thank the inkeeper for their time and continue on your way. ->Bath
 
@@ -483,5 +663,24 @@ You decide to wait a day, hoping for more luck, and spend your time before sleep
     ~ horserent = false
 }
     ~ playerlocation = "temple"
+    ->DONE
+=Sacrifice_Ending
+That... didn’t go well. It can’t have, otherwise you wouldn’t be in a cage right now. You don’t know how long it’s been. Days, perhaps? You’ve drifted in and out of consciousness, the light of day always too bright, the darkness too consuming. There is a constant pain in your skull, pounding. You vaguely remember being struck. More than once, you’d guess, on the road. But here you are.
+-(whatshappening)
+    *(a)[Where, exactly?]
+        You scour your memories of the journey, and look around you for clues as to your location. All you achieve is a sudden ringing in your head and a wave of nauseating pain. You won’t find an answer in your current state.
+            ->whatshappening
+    *(b)[Who else is here?]
+        You’re not alone, that’s certain. You can hear voices, accented voices of Picts or Caledonians, perhaps, speaking Gaelic, of course, too quickly for you to keep track of. No-one is coming to save you. 
+            ->whatshappening
+    *(c)[How can I escape?]
+        Your hands are bound together with rope, as are your feet. Your vision is blurry. Moving too fast brings on nausea. You’re in no fit state to try to escape. Whatever fate is in store for you is one you’ll have to accept.
+        ->whatshappening
+    *{a && b && c}[Await the end.]
+    It may have been minutes or hours, but they come for you. They take you from your cell and lift you to your feet. You are too weak from blood loss and hunger to try to resist, even when the acrid scent of fresh-spilt blood hits your nostrils. Even when you hear the spiralling song of the druids echoing about the desecrated temple you are led to. Even as you see the glint of the ritual dagger. Even as you feel it pierce your chest, you do not struggle. If you had hoped for a noble end, this is not it. You splutter and cough blood. The song rises around you, chanting now heard underneath and above it. You die in the same moment that reality is torn open. 
+    At least your death was not insignificant...
+    <strong>Your death has doomed us all.</strong>
+
+
 ->DONE
 
