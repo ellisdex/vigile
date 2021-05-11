@@ -196,6 +196,8 @@
         the Temple of Sulis Minerva
     - x == "Crann":
         {CRANNNAME}
+    - x == "village":
+        Cranborne village
 }
 
 /// ===function 30sec===
@@ -281,7 +283,7 @@
     -SECOND >= 100 || SECOND < 1000:
         ~ y = FLOOR(SECOND / 60)
         ~ alter(MINUTE, y)
-        ~ SECOND = SECOND mod 100
+        ~ SECOND = SECOND mod 60
 }
 }
 
@@ -369,6 +371,12 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "NR" && destination == "villa":
             ~ TRAVELTIME = INT(NR_VILLA*0.5)
             ~ traveltimeunit = "minutes"
+        - playerlocation == "NR" && destination == "Crann":
+            ~ TRAVELTIME = INT(NR_CRANN*0.5)
+            ~ traveltimeunit = "hours"
+        - playerlocation == "NR" && destination == "village":
+            ~ TRAVELTIME = INT(NR_VILLAGE*0.5)
+            ~ traveltimeunit = "hours"
     //Mai Dunn
         - playerlocation == "MD" && destination == "NR":
             ~ TRAVELTIME = INT(NR_MD*0.5)
@@ -376,6 +384,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "MD" && destination == "Bath":
             ~ TRAVELTIME = INT(BATH_MD*0.5)
             ~ traveltimeunit = "hours" 
+        - playerlocation == "MD" && destination == "village":
+            ~ TRAVELTIME = INT(MD_VILLAGE*0.5)
+            ~ traveltimeunit = "hours"
         - playerlocation == "MD" && destination == "forest":
             ~ TRAVELTIME = INT(MD_FOREST*0.5)
             ~ traveltimeunit = "minutes"
@@ -391,6 +402,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
             ~ traveltimeunit = "hours"
         - playerlocation == "Bath" && destination == "Crann":
             ~ TRAVELTIME = INT(BATH_CRANN*0.5)
+            ~ traveltimeunit = "hours"
+        - playerlocation == "Bath" && destination == "village":
+            ~ TRAVELTIME = INT(BATH_VILLAGE*0.5)
             ~ traveltimeunit = "hours"
         - playerlocation == "Bath" && destination == "tavern":
             ~ TRAVELTIME = INT(BATH_TAVERN*0.5)
@@ -416,6 +430,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "Bath" && destination == "Crann":
             ~ TRAVELTIME = INT(NR_CRANN*0.9)
             ~ traveltimeunit = "hours"
+        - playerlocation == "NR" && destination == "village":
+            ~ TRAVELTIME = INT(NR_VILLAGE*0.9)
+            ~ traveltimeunit = "hours"
         - playerlocation == "NR" && destination == "villa":
             ~ TRAVELTIME = INT(NR_VILLA*0.9)
              ~ traveltimeunit = "minutes"
@@ -432,6 +449,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "MD" && destination == "Crann":
             ~ TRAVELTIME = INT(MD_CRANN*0.9)
             ~ traveltimeunit = "hours"
+        - playerlocation == "MD" && destination == "village":
+            ~ TRAVELTIME = INT(MD_VILLAGE*0.9)
+            ~ traveltimeunit = "hours"
     //Bath
         - playerlocation == "Bath" && destination == "NR":
             ~ TRAVELTIME = INT(NR_BATH*0.9)
@@ -441,6 +461,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
             ~ traveltimeunit = "hours"
         - playerlocation == "Bath" && destination == "Crann":
             ~ TRAVELTIME = INT(BATH_CRANN*0.9)
+            ~ traveltimeunit = "hours"
+        - playerlocation == "Bath" && destination == "village":
+            ~ TRAVELTIME = INT(BATH_VILLAGE*0.9)
             ~ traveltimeunit = "hours"
         - playerlocation == "Bath" && destination == "tavern":
             ~ TRAVELTIME = INT(BATH_TAVERN*0.9)
@@ -466,6 +489,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "NR" && destination == "Crann":
             ~ TRAVELTIME = NR_CRANN
             ~ traveltimeunit = "hours"
+        - playerlocation == "NR" && destination == "village":
+            ~ TRAVELTIME = NR_VILLAGE
+            ~ traveltimeunit = "hours"
         - playerlocation == "NR" && destination == "villa":
             ~ TRAVELTIME = NR_VILLA
             ~ traveltimeunit = "minutes"
@@ -482,6 +508,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
         - playerlocation == "MD" && destination == "Crann":
             ~ TRAVELTIME = MD_CRANN
             ~ traveltimeunit = "hours"
+        - playerlocation == "MD" && destination == "village":
+            ~ TRAVELTIME = MD_VILLAGE
+            ~ traveltimeunit = "hours"
     //Bath
         - playerlocation == "Bath" && destination == "NR":
             ~ TRAVELTIME = NR_BATH
@@ -491,6 +520,9 @@ It is {HOUR}:{MINUTE}:{SECOND} on {whatday()}.
             ~ traveltimeunit = "hours"
         - playerlocation == "Bath" && destination == "Crann":
             ~ TRAVELTIME = BATH_CRANN
+            ~ traveltimeunit = "hours"
+        - playerlocation == "Bath" && destination == "village":
+            ~ TRAVELTIME = BATH_VILLAGE
             ~ traveltimeunit = "hours"
         - playerlocation == "Bath" && destination == "tavern":
             ~ TRAVELTIME = BATH_TAVERN
