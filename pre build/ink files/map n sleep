@@ -20,6 +20,7 @@
                 {advancetime(0,0,0,1)}
                 {alter(hasherbs, -1)}{wakeytime("yes")}
                 //{whattime("You wake at")}
+                //{leftovertime}
                 {advancetime(0,0,leftovertime,0)}
                 ->starvecheck(leftovertime)->
                 ->->
@@ -184,19 +185,22 @@
 // {advancetime(60,60,60,0)}
 // {whattimeDEBUG()}
 {whattime("It is")}
-+ {playerlocation == "MD" || playerlocation == "FP" || playerlocation == "Bath" || playerlocation == "temple" || playerlocation == "forest" || playerlocation == "tavern"}[Travel to {NR}]
++ {playerlocation == "MD" || playerlocation == "FP" || playerlocation == "Bath"}[Travel to {NR}]
     ~ playerdestination = "NR"
     ->MAP_continue
 + {playerlocation == "NR"} [Travel to {VILLA}]
     ~ playerdestination = "villa"
     ->MAP_continue
-+ {playerlocation == "NR" || playerlocation == "FP" || playerlocation == "Bath" || playerlocation == "temple" || playerlocation == "forest" || playerlocation == "tavern"}[Travel to Mai Dunn]
++ {playerlocation == "NR" || playerlocation == "Bath" || playerlocation == "forest"}[Travel to Mai Dunn]
     ~ playerdestination = "MD"
     ->MAP_continue
-+ {playerlocation == "MD" && knowsforest == true} [Travel to the forest outside Mai Dunn]
++ {playerlocation == "MD" && knowsforest == true} [Travel to Goededdwigg Forest]
      ~ playerdestination = "forest"
     ->MAP_continue
-+ {playerlocation == "NR" || playerlocation == "MD" || playerlocation == "FP" || playerlocation == "temple" || playerlocation == "forest" || playerlocation == "tavern"} [Travel to Bath]
++ {playerlocation == "MD" && knowscrann == true} [Travel to Crann Locháinín]
+     ~ playerdestination = "Crann"
+    ->MAP_continue
++ {playerlocation == "NR" || playerlocation == "MD" || playerlocation == "temple" || playerlocation == "tavern"} [Travel to Bath]
     ~ playerdestination = "Bath"
     ->MAP_continue
 + {playerlocation == "Bath" && knowstavern == true} [Travel to Bath Tavern]
@@ -213,14 +217,16 @@
 // return options
 /// NR
 + {playerlocation == "NR"} [Return to {NR}]
-    ->Mai_Dunn
+    ->Noviomagus_Reginorum
 + {playerlocation == "villa"} [Return to {VILLA}]
     ->Fishbourne_Palace
 /// MD
 + {playerlocation == "MD"} [Return to Mai Dunn]
     ->Mai_Dunn
-+ {playerlocation == "forest"} [Return to the forest]
++ {playerlocation == "forest"} [Return to Goededdwig Forest]
     ->MD_Forest
++ {playerlocation == "Crann"} [Return to Crann Locháinín]
+    ->CrannForest
 /// Bath
 + {playerlocation == "Bath"} [Return to Bath]
     ->Bath
@@ -246,6 +252,9 @@
 + {playerdestination == "forest"}[Yes, continue]
     -> sleep(sleepyn) ->
     ->MD_Forest
++ {playerdestination == "Crann"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->CrannForest
 + {playerdestination == "Bath"}[Yes, continue]
     -> sleep(sleepyn) ->
     ->Bath
