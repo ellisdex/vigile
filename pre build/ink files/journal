@@ -19,7 +19,7 @@
 {not MD_Forest && not Mai_Dunn.Boabaird.askplants: Find information on the mysterious plants}
 {not MD_Forest && Mai_Dunn.Boabaird.askplants: Speak to Heliwr the hunter at Goededdwig Forest (from Mai Dunn) for information on the mysterious plants}
 {knowscrann == true: Investigate Crann Locháinín for Chief Boabaird}
-Keep the governor of {NR} up-to-date with new developments
+Keep the governor of {NR} up-to-date with new developments (but don't waste his time)
 +[Return to Journal]
     ->Journal
     
@@ -192,4 +192,5 @@ While it was unfortunate that I didn't manage to interrogate Macdudd I still fou
 <li>I found a scrap of map that showed areas I know people have been abducted, there were some other areas marked too.</li>
 }
 </ul>
-->DONE
++[Return to Journal]
+    ->Journal
