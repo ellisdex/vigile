@@ -115,6 +115,11 @@
     ->->
 }
 
+===endoconvocheck===
+    ->sleepconvo->
+    ->datecheck->
+->->
+
 ===sleepconvo===
 // to use: -> sleepconvo ->
 {HOUR >= 22:
@@ -151,7 +156,7 @@
                 ->->
         }
 }
-
+->->
 
 // eat your food!!
 ===starvecheck2===
@@ -178,6 +183,9 @@
     ->->
 }
 
+===datecheck===
+{MONTH != 1: ->failstate_toolate}
+->->
 
 ===MAP===
 <strong>MAP</strong>
@@ -185,22 +193,25 @@
 // {advancetime(60,60,60,0)}
 // {whattimeDEBUG()}
 {whattime("It is")}
-+ {playerlocation == "MD" || playerlocation == "FP" || playerlocation == "Bath"}[Travel to {NR}]
++ {playerlocation == "MD" || playerlocation == "FP" || playerlocation == "Bath" || playerlocation == "forest" || playerlocation == "village"}[Travel to {NR}]
     ~ playerdestination = "NR"
     ->MAP_continue
 + {playerlocation == "NR"} [Travel to {VILLA}]
     ~ playerdestination = "villa"
     ->MAP_continue
-+ {playerlocation == "NR" || playerlocation == "Bath" || playerlocation == "forest"}[Travel to Mai Dunn]
++ {playerlocation == "NR" || playerlocation == "Bath" || playerlocation == "forest" || playerlocation == "village" || playerlocation == "Crann"}[Travel to Mai Dunn]
     ~ playerdestination = "MD"
+    ->MAP_continue
++{(playerlocation == "MD" || playerlocation == "NR" || playerlocation == "Bath" || playerlocation == "Crann")&& knowsvillage == true} [Travel to Cranborne village]
+    ~ playerdestination = "village"
     ->MAP_continue
 + {playerlocation == "MD" && knowsforest == true} [Travel to Goededdwigg Forest]
      ~ playerdestination = "forest"
     ->MAP_continue
-+ {playerlocation == "MD" && knowscrann == true} [Travel to Crann Locháinín]
++ {(playerlocation == "MD" || playerlocation == "NR" || playerlocation == "Bath" || playerlocation == "village") && knowscrann == true} [Travel to Crann Locháinín]
      ~ playerdestination = "Crann"
     ->MAP_continue
-+ {playerlocation == "NR" || playerlocation == "MD" || playerlocation == "temple" || playerlocation == "tavern"} [Travel to Bath]
++ {playerlocation == "NR" || playerlocation == "MD" || playerlocation == "temple" || playerlocation == "tavern" || playerlocation == "village" || playerlocation == "Crann"} [Travel to Bath]
     ~ playerdestination = "Bath"
     ->MAP_continue
 + {playerlocation == "Bath" && knowstavern == true} [Travel to Bath Tavern]
@@ -223,6 +234,8 @@
 /// MD
 + {playerlocation == "MD"} [Return to Mai Dunn]
     ->Mai_Dunn
++ {playerlocation == "village"} [Return to Cranborne]
+    ->SidequestVillage
 + {playerlocation == "forest"} [Return to Goededdwig Forest]
     ->MD_Forest
 + {playerlocation == "Crann"} [Return to Crann Locháinín]
@@ -249,6 +262,9 @@
 + {playerdestination == "MD"}[Yes, continue]
     -> sleep(sleepyn) ->
     ->Mai_Dunn
++ {playerdestination == "village"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->SidequestVillage
 + {playerdestination == "forest"}[Yes, continue]
     -> sleep(sleepyn) ->
     ->MD_Forest
