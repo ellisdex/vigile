@@ -17,20 +17,28 @@ CONST SLEEP_TIME = 22
 // easier to write lol
 CONST NR = "Noviomagus Reginorum"
 CONST VILLA = "Fishbourne Palace"
+CONST CRANNNAME = "Crann Locháinín"
 
 // travel time trackers
 /// hours
 CONST NR_BATH = 30
 CONST NR_MD = 28
 CONST BATH_MD = 18
+CONST MD_CRANN = 3
+CONST NR_CRANN = 26
+CONST BATH_CRANN = 18
 /// minutes
 CONST NR_VILLA = 40
 CONST BATH_TAVERN = 20
 CONST BATH_TEMPLE = 22
 CONST MD_FOREST = 40
 
+//knows things
+VAR knowcaitrionaname = false
+
 // can access sublocations?
 VAR knowsforest = false
+VAR knowscrann = false
 VAR knowstavern = false
 VAR knowstemple = false
 
@@ -68,6 +76,8 @@ CONST HORSEBUYPRICE = 200
 LIST LEGIONOP = poor, negative, neutral, (positive), great
 
 LIST LOCALSOP = poor, negative, neutral, (positive), great
+
+LIST HELIWROP = poor, (negative), neutral, positive, great
 
 VAR pricemod = 1
 
