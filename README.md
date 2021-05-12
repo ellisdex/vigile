@@ -6,4 +6,4 @@ this is a student project created for our undergrad game design dissertation. th
 
 To play Vigile, please open PROTOTYPE -> index.html - this should work on most popular browsers and has been tested on Chrome, Firefox and Opera GX. Do not separate or edit files in the PROTOTYPE folder.
 
-If you would like to mess with the variables in any way (change the date, add more money, etc.), or look at the code itself, please open INK EDITOR FILES -> story in the Inky editor program.
+If you would like to mess with the variables in any way (change the date, add more money, etc.), or look at the code itself, please open INK EDITOR FILES -> story in the Inky editor program. (also requires the other files in INK EDITOR FILES to work.)
