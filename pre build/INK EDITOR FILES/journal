@@ -1,0 +1,196 @@
+===Journal===
++[To-do list]
+    ->to_do
++[Cases]
+    ->Cases
++[Clues]
+    ->Clues
++[Return to Map]
+    ->MAP
+
+=to_do
+<strong>To-Do List</strong>
+{daytalktoboabaird >= DAY: Wait for Boabaird to get information on the tattooed man}
+{not SidequestVillage && (Mai_Dunn.Boabaird_Opening.Boabaird_Ask_Job || Mai_Dunn.Boabaird.askjob): Investigate Cranborne village robberies for Chief Boabaird}
+{daytalktoboabaird < DAY && not Mai_Dunn.Boabaird.askagaintattoos: Return to Boabaird to get information on the tattooed man}
+{Mai_Dunn.Boabaird.askagaintattoos && not Bath.searchmacdudd: Search Bath for the tattooed man}
+{Bath.searchmacdudd && BathTavern.GuardsSitch && not Mai_Dunn.Boabaird.tellboabairdmacdudd: Tell Boabaird what you've found out}
+{Bath.searchmacdudd && not BathTavern.GuardsSitch && not Mai_Dunn.Boabaird.askboabairdmacdudd: See if Boabaird knows anything else about the tattooed man}
+{not MD_Forest && not Mai_Dunn.Boabaird.askplants: Find information on the mysterious plants}
+{not MD_Forest && Mai_Dunn.Boabaird.askplants: Speak to Heliwr the hunter at Goededdwig Forest (from Mai Dunn) for information on the mysterious plants}
+{knowscrann == true: Investigate Crann Locháinín for Chief Boabaird}
+Keep the governor of {NR} up-to-date with new developments (but don't waste his time)
++[Return to Journal]
+    ->Journal
+    
+===Cases===
++[Case 1: The Disappearance of Gaius Barbarus Tertius]
+    ->Case1
++[Case 2: A Suspicious Individual]
+    ->Case2
++[Return to Journal]
+    ->Journal
+    
+=Case1
+-(1scene1)
+I followed the only lead the governor had: Gaius was on his way to Noviomagus Reginorum to perform a sacrifice in his uncle’s name. Upon arriving at the town I was met with contempt from the native populace. They said they had their own people that were missing and that finding a missing child was more important than some governor’s nephew. U agreed to help them, if only for the exchange of any information they had, but I also felt the two disappearances had to be linked.
+
+After speaking with the parents and the missing child’s friends, nothing came up, except where the children liked to play sometimes. I investigated the area and found the site that I believed the child had been taken from.
+
+<strong>Clues Found:</strong>
+No sign of attack or struggle.
+Strange plants that seem to be out of season
+The child’s toy. 
+
+<strong>Relations Improved:</strong>
+Local opinion
++[Continue]
+    ->1scene2
+
+-(1scene2)
+From this information I surmised that the child was probably still out there somewhere and most likely linked with the disappearance of Gaius. I told the parents and they gave me some more information to do with other cases. They told me to talk to the chieftain of the nearby hill fort of Mai Dunn.
+
+
+After travelling to Mai Dunn I spoke with the chieftain, one Boabaird, and he told me of an attack and abduction. This time however there was a witness. The hunter Heliwr. After interviewing Heliwr I only found a couple of things:
+
+<strong>Clues Found:</strong>
+The assailants came at them with clubs, the hunter was knocked unconscious with one. This shows non-lethality meaning they only wanted to take prisoners.
+One of the assailants had celtic, tribal tattoos, linked with war. Unsure what tribe they may hail from though.
+    +[Continue]
+        ->1scene3
+
+-(1scene3)
+After the interview Heliwr took me to the site of the attack. I looked around and found a few more clues.
+
+<strong>Clues Found:</strong>
+More of the unseasonal plants. I asked Heliwr about them and he told me they are indeed out of season, the mid-summer bloom of Vervain. Unusual indeed for this time of year.
+I discovered tracks that led away from the attack. Following them led me to a river where they disappeared. This leads two locations they could have gone. Goededdwig Forest and Trefton Hamlet.
+
+<strong>Relations Improved:</strong>
+Legion opinion
+Heliwr
+
+    +[Continue]
+        ->1scene4
+
+-(1scene4)
+I decided the forest was too large to search thoroughly enough. I made my way back to Fishbourne Palace. Told the governor of my progress. He rewarded me with pay and accepted my request for the legion’s help in searching the forest.
+
+This unfortunately came up with nothing, except annoying Heliwr as they ransacked his cabin in the search.
+
+<strong>Relations Worsened:</strong>
+Heliwr
+    +[Continue]
+        ->1scene5
+
+-(1scene5)
+I decided after that fiasco to search Trefton Hamlet myself. Upon arriving I went to talk to the innkeeper to see if they had heard any rumours about they mentioned a few people in the village were acting suspiciously: the butcher, the baker and the candlestick maker.
+
+I looked into the baker first. I quickly found why the baker had been acting so suspicious. They were cuckolding their marital partner. Looking into it any further seems pointless.
+
+I then moved on to the candlestick maker. The innkeeper had mentioned that they seemed 'witchy'. After asking the woman a few questions and taking a look around her work and living space I discovered she was in fact just atypical to the cultural norms. Progressive in her thinking and intelligent in her study. 
+
+Finally I went to the butcher, expecting to find my culprit but wanting to investigate nonetheless. All I discovered on him was that some of his cuts of meat were not exactly as advertised.
+
+Upon returning to the innkeeper to ask if they had heard anything else of note I noticed something that had slipped past me earlier. Lining the door was a plant I recognised. Vervain. This would have been enough to arrest the innkeep but I interrogated them anyway. After being accused they folded and told me all I needed to know.
+
+<strong>Clues Found:</strong>
+There is a larger group responsible for the abductions.
+The innkeeper would have been tasked with transporting the prisoners once they had received the information.
+The abductees of this area were being kept in the cellar. Gaius, the hunters and the child included.
+
+<strong>Relations Improved:</strong>
+Local opinion
+Legion Opinion
+
+This was the end of the line here. I gained no more leads or direction and only had one clue to go forward with. The tattooed individual seen by Heliwr.
++[Return to Journal]
+    ->Journal
+
+=Case2
+-(2scene1)
+I decided to go to Boabaird for help with any information about the Tattooed individual.  We had helped each other in the past and I hoped he would be willing to help me again. I asked what he might know about the tattoos and he told me that they were most likely Pictish. Meaning our suspect is from beyond Hadrian’s wall. I asked if he had heard of such a person. He said he hadn't, but would have his people look for me. {Mai_Dunn.Boabaird.askagaintattoos: When I returned to Boabaird, he said the man had been seen at Bath. I knew I had to head there at once, lest he move on from the city.}
+{Bath.searchmacdudd:
+I explored the city and quickly found an area that had a higher population of Celts.
+    {seesmacdudd == true: I found the man that matched the tattooed description. Unfortunately he had a group of thugs under his employ, keeping an eye who was entering and exiting the tavern. I wouldn't be able to talk to him at the inn until they were gone.  I had to decide how to approach talking to the man to be able to interrogate him.}
+    {seesmacdudd == false: However, I couldn't find the man anywhere - it seemed I had been too late.}
+}
+
+{BathTavern.GuardsSitch.talkguards:I decided the best way to go about getting the man alone was to get rid of his thugs, through persuasion or threat they needed to be gone.}
+
+{BathTavern.GuardsSitch.threatenguards:I tried to threaten the thugs to get them to leave, told them they stood no chance now that the legion knew they were in league with the tattooed man. Unfortunately they saw through my bluff, knowing that the legion would not interfere in a Roman city for risk of angering its citizens. I had to leave and reevaluate my approach.}
+
+{BathTavern.GuardsSitch.persuadeguards:I decided that persuasion was the way to go about getting the thugs to leave. I told them if they let me go and talk to the tattooed man they would be free to leave and pursue whatever future they wished. They agreed and so I was able to go and talk to the tattooed man.}
+
+{BathTavern.GuardsSitch.talkman: In the end I thought that patience should be the way to go. I waited some time until the tattooed man left the inn. I did not know where he was going but decided I should confront him before he got there. I now had to decide how I was going to get him to talk.}
+
+{BathTavern.GuardsSitch.threatenman: I told the man he didn't have a chance and that the might of the Roman legion would come to arrest him if he didn’t comply. Unfortunately he saw through my bluff, knowing that the legion would not interfere in a Roman city for risk of angering its citizens. I had to leave and reevaluate my approach.}
+
+{BathTavern.GuardsSitch.persuademan: I decided that I could strike a deal with the man. I told him that he was known to me and that if he willingly shared his information he was free to leave Brittania and return beyond the wall. I wasn’t sure it worked as he left silently but decided that following him was my only option.}
+
+
+{BathTavern.Macdudd_Invite:
+I had managed to get the opportunity to get some answers from the tattooed man and discovered a lot of useful information.
+
+<strong>Clues Found:</strong>
+The man’s name was Macdudd
+He was hired by druids, one in particular was helping with the abductions
+Chossach is a named druid, the one that has been working closely with Macdudd
+They are recruiting more people to train and become druids
+The plants were a side effect of the druidic magic that was being used. They have some link to the ritual being planned
+People are being abducted, possibly for human sacrifice at a ritual
+The ritual will be taking place at Imbolc. The spring festival. Its as close, the first day of Februarius
+
+This was a lot of useful information but left me with little to go on. For now my only lead with any link is the plants. If I can find out more about it and its symbolism, or locations it has been sighted, maybe it can lead me to the druids and more knowledge of this ritual.
+}
+
+{BathTavern.Fail_day1:
+Unfortunately, by the time I had a chance to try and get to the tattooed man again, he had fled with his thugs. While this was a loss there was still a chance I could discover something about him or what he was doing. I spoke with the innkeeper and found some information and the innkeeper let me search the room to see if there was anything left behind.
+
+Clues Found:
+The man’s name was Macdudd, he seemed the violent type, his job was probably something of that sort.
+He would often leave the tavern, possibly to meet with someone.
+I found a rune denoting the month of February
+There was a sprout of vervain in Macdudd’s room
+I found a scrap of map that showed areas I know people have been abducted, there were some other areas marked too.
+
+While it was unfortunate that I didn't manage to interrogate Macdudd I still found some information. For now my only lead with any link is the plants. If I can find out more about it and its symbolism, or locations it has been sighted, it might lead me to some more answers. The mark about Februarius has given me something else to ponder on. Perhaps there is some significance linked to the Celts and that month.
+}
++[Return to Journal]
+    ->Journal
+
+
+=Case3
+->DONE
+
+===Clues===
+<strong>All Clues</strong>
+<ul>
+<li>No sign of attack or struggle at disappearance sites.</li>
+<li>Strange plants at disappearance sites.</li>
+<li>The assailants used with clubs, the hunter was knocked unconscious with one. This shows non-lethality meaning they only wanted to take prisoners.</li>
+<li>One of the assailants had Celtic, tribal tattoos, linked with war. {BathTavern.Macdudd_Invite || BathTavern.Fail_day1: His name is Macdudd and he has been working with druids to kidnap people.}</li>
+<li>I discovered tracks that led away from the attack. Following them led me to a river where they disappeared. This leads two locations they could have gone: Goededdwig Forest and Trefton Hamlet.</li>
+<li>There is a {BathTavern.Macdudd_Invite:group of druids|larger group} responsible for the abductions.</li>
+<li>The innkeeper would have been tasked with transporting the prisoners once they had received the information.</li>
+<li>The abductees of this area were being kept in the cellar. Gaius, the hunters and the child included.</li>
+{MD_Forest.Heliwr_Vervain && not BathTavern.Macdudd_Invite:More of the unseasonal plants. I asked Heliwr about them and he told me they are indeed out of season, the mid-summer bloom of Vervain. Unusual indeed for this time of year.</li>}
+{BathTavern.Macdudd_Invite: 
+    <li> The tattooed man’s name was Macdudd</li>
+    <li>He was hired by druids, one in particular was helping with the abductions</li>
+    <li>Chossach is a named druid, the one that has been working closely with Macdudd</li>
+    <li>They are recruiting more people to train and become druids</li>
+    <li>The {MD_Forest.Heliwr_Vervain:Vervain plants|plants, called Vervain,} were a side effect of the druidic magic that was being used. They have some link to the ritual being planned</li>
+    <li>People are being abducted, possibly for human sacrifice at a ritual
+    <li>The ritual will be taking place at Imbolc. The spring festival. Its is close, the first day of Februarius</li>
+    }
+{BathTavern.Fail_day1:
+<li>The tattooed man’s name was Macdudd, he seemed the violent type, his job was probably something of that sort.</li>
+<li>He would often leave the tavern, possibly to meet with someone.
+<li>I found a rune denoting the month of Februarius</li>
+<li>There was a sprout of {MD_Forest.Heliwr_Vervain:vervain|the strange plants} in Macdudd’s room</li>
+<li>I found a scrap of map that showed areas I know people have been abducted, there were some other areas marked too.</li>
+}
+</ul>
++[Return to Journal]
+    ->Journal

@@ -1,0 +1,333 @@
+///===endofday(sleepyn)===
+//->sleep(sleepyn)->
+//->->
+
+===sleep(sleepyn)===
+// to use: -> sleep ->
+    ~ temp leftovertime = (TRAVELTIME + HOUR) - 22
+{traveltimeunit == "hours": 
+    {sleepyn >= 22:
+        {&You feel yourself getting tired. It is not hard to find a place to set up your camp - you lay down under the stars to rest.|You realise it is getting late, and decide to set up camp. The quiet noises of nocturnal creatures are your only company.|You know staying up longer is pointless - everyone is asleep, and you should be soon, too. Once you've set up camp, you watch the flickering coals of your fire as you drift off.}
+        {hassupplies >=1:
+            You've gone through one pack of supplies today. {alter(hassupplies, -1)} You have {hassupplies} left.
+                ~ starving = 0
+            - else:
+                {alter(starving, 1)} You go to sleep hungry and thirsty, though, as you have no supplies. It is your {print_day(starving)} day without food and drink.
+        }
+        {hasherbs >= 1:
+        {hasherbs == 1: You have 1 pack of sleeping herbs. Do you want to use it to wake earlier?}{hasherbs >= 2: You have {hasherbs} packs of sleeping herbs. Do you want to use one to wake earlier?}
+            +[Yes]
+                {advancetime(0,0,0,1)}
+                {alter(hasherbs, -1)}{wakeytime("yes")}
+                //{whattime("You wake at")}
+                //{leftovertime}
+                {advancetime(0,0,leftovertime,0)}
+                ->starvecheck(leftovertime)->
+                ->->
+            +[No]
+                {advancetime(0,0,0,1)}
+                {wakeytime("no")}
+                //{whattime("You wake at")}
+                {advancetime(0,0,leftovertime,0)}
+                //{leftovertime}
+                //{whattimeDEBUG()}
+                ->starvecheck(leftovertime)->
+                ->->
+            - else:
+                +[Go to sleep]
+                    {advancetime(0,0,0,1)}
+                    {wakeytime("no")}
+                    //{whattime("You wake at")}
+                    {advancetime(0,0,leftovertime,0)}
+                ->starvecheck(leftovertime)->
+                ->->
+        }
+        
+        - else:
+            {advancetime(0,0,TRAVELTIME,0)}
+            ->->
+        }
+    - else:
+        {advancetime(0,TRAVELTIME,0,0)}
+        ->->
+}
+
+// eat your food!!
+===starvecheck(leftovertime)===
+~ temp halfdistance = 0
+{starving >=3: 
+    {advancetime(0,0,0,2)}
+    ~ HOUR = 6
+    {
+    //Noviomagus Reginorum
+        - playerlocation == "NR" && playerdestination == "MD":
+            ~ halfdistance = NR_MD / 2
+            {leftovertime <= halfdistance:
+                ~ playerlocation = "MD"
+            }
+        - playerlocation == "NR" && playerdestination == "Bath":
+            ~ halfdistance = NR_BATH / 2
+            {leftovertime <= halfdistance:
+                ~ playerlocation = "Bath"
+            }
+    //Mai Dunn
+        - playerlocation == "MD" && playerdestination == "NR":
+            ~ halfdistance = NR_MD / 2
+            {leftovertime <= halfdistance:
+                ~ playerlocation = "NR"
+            }
+        - playerlocation == "MD" && playerdestination == "Bath":
+            ~ halfdistance = BATH_MD / 2
+            {leftovertime <= halfdistance:
+                ~ playerlocation = "Bath"
+            }
+    //Bath
+        - playerlocation == "Bath" && playerdestination == "NR":
+            ~ halfdistance = NR_BATH / 2
+            {leftovertime <= halfdistance:
+                ~ playerlocation = "NR"
+            }
+        - playerlocation == "Bath" && playerdestination == "MD":
+            ~ halfdistance = BATH_MD / 2
+            {leftovertime <= halfdistance:
+                ~ playerlocation = "MD"
+            }
+
+    }
+{MONTH == 1:
+    {beenhospital == false && MONTH == 1:
+        When you wake up, however, you are in a bed somewhere you don't recognise. Indoors, a tent of some kind- someone walks in, holding a bowl. 
+
+        "Welcome back to the world of the living," he says, sitting on a stool next to the bed. He gestures for you to sit up - it takes you more effort than it should - and hands you the bowl, full of watered-down wine, which you drink. "I wouldn't think a legionary would neglect themselves to the point of fainting on the side of the road, but here you are. You're lucky someone found you and took you to me."
+        *[Ask where you are]
+            "Where am I?" you ask.
+            
+            He gives you a withering look. "{print_location(playerlocation)}. You've also been unconscious for two days while we've been treating you. It's {print_num(HOUR)} or so in the morning, the {print_day(DAY)} of {print_month(MONTH)}, and you've been here for far longer than you should have. Get some food in you and get out, please."
+            ~ starving = 0
+            ~ justbeenhospital = true
+            ->->
+        -else: 
+        {When you wake up, you're inside. You sigh, the dryness of your throat turning it into a cough. You must be in a hospital of some kind again. Someone has left a jug of watered-down wine and some bread on the side for you. You eat and drink carefully, then on your way out, ask for where you are and what day it is.|You wake up inside, in a hospital, again, the customary food and drink beside the bed. You've done this enough times to understand how it works. As you leave, you ask someone for the time and date.|You've got to stop waking up in hospitals.}
+        You're at {playerlocation}. It's {print_num(HOUR)} or so in the morning, the {print_day(DAY)} of {print_month(MONTH)}.
+            ~ starving = 0
+            ~ justbeenhospital = true
+            ->->
+        }
+        - else:
+        ->failstate_toolate
+        }
+    -else:
+    ->->
+}
+
+===endoconvocheck===
+    ->sleepconvo->
+    ->datecheck->
+->->
+
+===sleepconvo===
+// to use: -> sleepconvo ->
+{
+    - HOUR >= 22:
+        {&You know staying up longer is pointless - everyone is asleep, and you should be soon, too. Once you've set up camp, you watch the flickering coals of your fire as you drift off.|You feel yourself getting tired. It is not hard to find a place to set up your camp - you lay down under the stars to rest.|You realise it is getting late, and decide to set up camp. The quiet noises of nocturnal creatures are your only company.|}
+        {hassupplies >=1:
+            You've gone through one pack of supplies today. {alter(hassupplies, -1)} You have {hassupplies} left.
+                ~ starving = 0
+            - else:
+                {alter(starving, 1)} You go to sleep hungry and thirsty, though, as you have no supplies. It is your {print_day(starving)} day without food and drink.
+        }
+        {hasherbs >= 1:
+        {hasherbs == 1: You have 1 pack of sleeping herbs. Do you want to use it to wake earlier?}{hasherbs >= 2: You have {hasherbs} packs of sleeping herbs. Do you want to use one to wake earlier?}
+            +[Yes]
+                {advancetime(0,0,0,1)}
+                {alter(hasherbs, -1)}{wakeytime("yes")}
+                //{whattime("You wake at")}
+                ->starvecheck2->
+                ->->
+            +[No]
+                {advancetime(0,0,0,1)}
+                {wakeytime("no")}
+                //{whattime("You wake at")}
+
+                //{leftovertime}
+                //{whattimeDEBUG()}
+                ->starvecheck2->
+                ->->
+            - else:
+                +[Go to sleep]
+                    {advancetime(0,0,0,1)}
+                    {wakeytime("no")}
+                    //{whattime("You wake at")}
+                ->starvecheck2->
+                ->->
+        }
+    - HOUR < 4:
+        {&You know staying up longer is pointless - everyone is asleep, and you should be soon, too. Once you've set up camp, you watch the flickering coals of your fire as you drift off.|You feel yourself getting tired. It is not hard to find a place to set up your camp - you lay down under the stars to rest.|You realise it is getting late, and decide to set up camp. The quiet noises of nocturnal creatures are your only company.}
+        {hassupplies >=1:
+            You've gone through one pack of supplies today. {alter(hassupplies, -1)} You have {hassupplies} left.
+                ~ starving = 0
+            - else:
+                {alter(starving, 1)} You go to sleep hungry and thirsty, though, as you have no supplies. It is your {print_day(starving)} day without food and drink.
+        }
+        {hasherbs >= 1:
+        {hasherbs == 1: You have 1 pack of sleeping herbs. Do you want to use it to wake earlier?}{hasherbs >= 2: You have {hasherbs} packs of sleeping herbs. Do you want to use one to wake earlier?}
+            +[Yes]
+                {advancetime(0,0,0,0)}
+                {alter(hasherbs, -1)}{wakeytime("yes")}
+                //{whattime("You wake at")}
+                ->starvecheck2->
+                ->->
+            +[No]
+                {advancetime(0,0,0,0)}
+                {wakeytime("no")}
+                //{whattime("You wake at")}
+
+                //{leftovertime}
+                //{whattimeDEBUG()}
+                ->starvecheck2->
+                ->->
+            - else:
+                +[Go to sleep]
+                    {advancetime(0,0,0,0)}
+                    {wakeytime("no")}
+                    //{whattime("You wake at")}
+                ->starvecheck2->
+                ->->
+        }
+    - else:
+        ->->
+}
+
+// eat your food!!
+===starvecheck2===
+{starving >=3: 
+    ~ daystarving = DAY
+     {advancetime(0,0,0,2)}
+    ~ HOUR = 6
+    {MONTH == 1:
+    {beenhospital == false:
+        When you wake up, however, you are in a bed somewhere you don't recognise. Indoors, a tent of some kind- someone walks in, holding a bowl. 
+
+        "Welcome back to the world of the living," he says, sitting on a stool next to the bed. He gestures for you to sit up - it takes you more effort than it should - and hands you the bowl, full of watered-down wine, which you drink. "I wouldn't think a legionary would neglect themselves to the point of fainting on the side of the road, but here you are. You're lucky someone found you and took you to me."
+        *[Ask where you are]
+            "Where am I?" you ask.
+            
+            He gives you a withering look. "{print_location(playerlocation)}. You've also been unconscious for two days while we've been treating you. It's {print_num(HOUR)} or so in the morning, the {print_day(DAY)} of {print_month(MONTH)}, and you've been here for far longer than you should have. Get some food in you and get out, please."
+            ~ starving = 0
+            ~ justbeenhospital = true
+            ->->
+        -else:
+        {When you wake up, you're inside. You sigh, the dryness of your throat turning it into a cough. You must be in a hospital of some kind again. Someone has left a jug of watered-down wine and some bread on the side for you. You eat and drink carefully, then on your way out, ask for where you are and what day it is.|You wake up inside, in a hospital, again, the customary food and drink beside the bed. You've done this enough times to understand how it works. As you leave, you ask someone for the time and date.|You've got to stop waking up in hospitals.}
+        You're at {playerlocation}. It's {print_num(HOUR)} or so in the morning, the {print_day(DAY)} of {print_month(MONTH)}.
+            ~ justbeenhospital = true
+            ~ starving = 0
+            ->->
+            }
+        - else:
+            ->failstate_toolate
+        }
+    -else:
+    ->->
+}
+
+===datecheck===
+{MONTH != 1: ->failstate_toolate}
+->->
+
+===MAP===
+<strong>MAP</strong>
+/// debug tools
+// {advancetime(60,60,60,0)}
+// {whattimeDEBUG()}
+{whattime("It is")}
++ {playerlocation == "MD" || playerlocation == "FP" || playerlocation == "Bath" || playerlocation == "forest" || playerlocation == "village" || playerlocation == "villa"}[Travel to {NR}]
+    ~ playerdestination = "NR"
+    ->MAP_continue
++ {playerlocation == "NR"} [Travel to {VILLA}]
+    ~ playerdestination = "villa"
+    ->MAP_continue
++ {playerlocation == "NR" || playerlocation == "Bath" || playerlocation == "forest" || playerlocation == "village" || playerlocation == "Crann"}[Travel to Mai Dunn]
+    ~ playerdestination = "MD"
+    ->MAP_continue
++{(playerlocation == "MD" || playerlocation == "NR" || playerlocation == "Bath" || playerlocation == "Crann")&& knowsvillage == true} [Travel to Cranborne village]
+    ~ playerdestination = "village"
+    ->MAP_continue
++ {playerlocation == "MD" && knowsforest == true} [Travel to Goededdwigg Forest]
+     ~ playerdestination = "forest"
+    ->MAP_continue
++ {(playerlocation == "MD" || playerlocation == "NR" || playerlocation == "Bath" || playerlocation == "village") && knowscrann == true} [Travel to Crann Locháinín]
+     ~ playerdestination = "Crann"
+    ->MAP_continue
++ {playerlocation == "NR" || playerlocation == "MD" || playerlocation == "temple" || playerlocation == "tavern" || playerlocation == "village" || playerlocation == "Crann"} [Travel to Bath]
+    ~ playerdestination = "Bath"
+    ->MAP_continue
++ {playerlocation == "Bath" && knowstavern == true} [Travel to Bath Tavern]
+    ~ playerdestination = "tavern"
+    ->MAP_continue
++ {playerlocation == "Bath" && knowstemple == true} [Travel to the Temple of Sulis Minerva]
+     ~ playerdestination = "temple"
+    ->MAP_continue
++ [Open Journal]
+    ->Journal
++ [Check Inventory]
+    {INV_CHECK()}
+    ->MAP
+// return options
+/// NR
++ {playerlocation == "NR"} [Return to {NR}]
+    ->Noviomagus_Reginorum
++ {playerlocation == "villa"} [Return to {VILLA}]
+    ->Fishbourne_Palace
+/// MD
++ {playerlocation == "MD"} [Return to Mai Dunn]
+    ->Mai_Dunn
++ {playerlocation == "village"} [Return to Cranborne]
+    ->SidequestVillage
++ {playerlocation == "forest"} [Return to Goededdwig Forest]
+    ->MD_Forest
++ {playerlocation == "Crann"} [Return to Crann Locháinín]
+    ->CrannForest
+/// Bath
++ {playerlocation == "Bath"} [Return to Bath]
+    ->Bath
++ {playerlocation == "tavern"} [Return to Bath Tavern]
+    ->BathTavern
++ {playerlocation == "temple"} [Return to the temple]
+    ->SulisTemple
+
+
+    
+===MAP_continue===
+{travel_check(playerdestination)}
+    ~ temp sleepyn = TRAVELTIME + HOUR
++ {playerdestination == "NR"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->Noviomagus_Reginorum
++ {playerdestination == "villa"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->Fishbourne_Palace
++ {playerdestination == "MD"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->Mai_Dunn
++ {playerdestination == "village"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->SidequestVillage
++ {playerdestination == "forest"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->MD_Forest
++ {playerdestination == "Crann"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->CrannForest
++ {playerdestination == "Bath"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->Bath
++ {playerdestination == "tavern"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->BathTavern
++ {playerdestination == "temple"}[Yes, continue]
+    -> sleep(sleepyn) ->
+    ->SulisTemple
++ [Go back]
+    ->MAP
+/// location tracking
+/// {playerlocation == "NR" || playerlocation == "MD" || playerlocation == "Bath" || playerlocation == "FP" || playerlocation == "temple" || playerlocation == "forest" || playerlocation == "tavern"}
